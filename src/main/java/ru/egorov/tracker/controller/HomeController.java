@@ -16,7 +16,7 @@ public class HomeController {
 
     @GetMapping("/")
     public String in() {
-        //model.addAttribute("name", name);
+
         return "in";
     }
 
@@ -32,9 +32,6 @@ public class HomeController {
     public String addIssue(@RequestParam String issueName, String issueDescription, Model model) {
         Issue issue = new Issue(issueName, issueDescription);
         issuePepo.save(issue);
-
-        //Iterable<Issue> issues = issuePepo.findAll();
-        //model.addAttribute("issues", issues);
 
         return "redirect:/main";
     }
