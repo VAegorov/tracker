@@ -16,9 +16,6 @@ import ru.egorov.tracker.repos.ProjectRepo;
 import ru.egorov.tracker.repos.UserRepo;
 //import ru.egorov.tracker.repos.ProjectUsersRepo;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
 
 @Controller
 public class HomeController {
@@ -60,34 +57,25 @@ public class HomeController {
     public String addProject(@AuthenticationPrincipal User user, @RequestParam String projectName, Model model) {
         Project project = new Project(projectName, user);
         projectRepo.save(project);
-        user.getProjects().add(project);
+        user.getProjectsOwner().add(project);
         userRepo.save(user);
-        //userRepo.flush();
-        //create table from user_project and include owner
-        /*ProjectUsers projectUsers = new ProjectUsers(project);
-        projectUsersRepo.save(projectUsers);*/
-
-
 
         return "redirect:/home";
     }
 
     @GetMapping("/home")
     public String home(@AuthenticationPrincipal User user, Model model) {
-        //Iterable<Project> projects = projectRepo.findAll();
-        //если user является создателем или участником project
-       // if (user.equals())
 
-        Iterable<Project> projects = projectRepo.findAllWhereById(user.getId());
-        model.addAttribute("projects", projects);
+        Iterable<Project> ownerProjects = projectRepo.findAllWhereByIdOwner(user.getId());
+        model.addAttribute("ownerProjects", ownerProjects);
+
+        Iterable<Project> adminProjects = projectRepo.findAllWhereByIdAdmin(user.getId());
+        model.addAttribute("adminProjects", adminProjects);
+
+        Iterable<Project> userProjects = projectRepo.findAllWhereByIdUser(user.getId());
+        model.addAttribute("userProjects", userProjects);
 
 
-        //Iterable<Project> projects = projectRepo.findAllWhereById(user.getId());
-       /* if (!user.getProjects().isEmpty()) {
-            Iterable<Project> projects = user.getProjects();
-            System.out.println(777);
-            model.addAttribute("projects", projects);
-        }*/
         return "home";
     }
 }

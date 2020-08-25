@@ -14,7 +14,7 @@ public class ProjectUsers {
 
     private Project project;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "usr_id")
     private User user;
 

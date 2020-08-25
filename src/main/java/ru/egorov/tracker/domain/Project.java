@@ -14,18 +14,22 @@ public class Project implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    @Column(name = "projectname")
     private String projectName;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "usr_id")
-    //@CollectionTable(name = "usr", joinColumns = @JoinColumn(name = "usr_id"))
+    @JoinColumn(name = "owner", referencedColumnName = "id")
+    //@Column(name = "owner")
     private User owner;
 
-    //@OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    //private Set<User> users = new HashSet<>();
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "admin", referencedColumnName = "id")
+    //@Column(name = "admin")
+    private User admin;
 
     @ManyToMany
-    @JoinTable(name = "project_user_role",
+    @JoinTable(name = "project_user",
             joinColumns = @JoinColumn(name = "project_id"),
             inverseJoinColumns = @JoinColumn(name = "usr_id")
     )
@@ -36,10 +40,8 @@ public class Project implements Serializable {
     }
 
     public Project(String projectName, User user) {
-        //this.owner = (Usr) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         this.owner = user;
-        //this.users.add(user);
-        System.out.println(555);
+        System.out.println("Created new project!");
         this.projectName = projectName;
     }
 
@@ -77,5 +79,13 @@ public class Project implements Serializable {
 
     public void setUsers(Set<User> users) {
         this.users = users;
+    }
+
+    public User getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(User admin) {
+        this.admin = admin;
     }
 }

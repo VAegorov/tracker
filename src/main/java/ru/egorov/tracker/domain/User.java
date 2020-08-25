@@ -14,22 +14,28 @@ public class User implements UserDetails, Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    @Column(name = "username")
     private String username;
+
+    @Column(name = "password")
     private String password;
+
+    @Column(name = "active")
     private boolean active;
 
-    //@ElementCollection(targetClass = Project.class, fetch = FetchType.EAGER)
-    //@CollectionTable(name = "usr_project", joinColumns = @JoinColumn(name = "usr_id"))
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private Set<Project> projectsOwner = new HashSet<>();//проекты в которых он owner
 
-    private Set<Project> projects = new HashSet<>();
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private Set<Project> projectsAdmin = new HashSet<>();//проекты в которых он admin
 
     @ManyToMany
-    @JoinTable(name = "project_user_role",
+    @JoinTable(name = "project_user",
             joinColumns = @JoinColumn(name = "usr_id"),
             inverseJoinColumns = @JoinColumn(name = "project_id")
     )
-    private Set<Project> projectsUser = new HashSet<>();
+    private Set<Project> projectsUser = new HashSet<>();//проекты в которых он user
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "usr_role", joinColumns = @JoinColumn(name = "usr_id"))
@@ -108,12 +114,12 @@ public class User implements UserDetails, Serializable {
         this.roles = roles;
     }
 
-    public Set<Project> getProjects() {
-        return projects;
+    public Set<Project> getProjectsOwner() {
+        return projectsOwner;
     }
 
-    public void setProjects(Set<Project> projects) {
-        this.projects = projects;
+    public void setProjectsOwner(Set<Project> projects) {
+        this.projectsOwner = projects;
     }
 
     public Set<Project> getProjectsUser() {
@@ -122,6 +128,14 @@ public class User implements UserDetails, Serializable {
 
     public void setProjectsUser(Set<Project> projectsUser) {
         this.projectsUser = projectsUser;
+    }
+
+    public Set<Project> getProjectsAdmin() {
+        return projectsAdmin;
+    }
+
+    public void setProjectsAdmin(Set<Project> projectsAdmin) {
+        this.projectsAdmin = projectsAdmin;
     }
 
     @Override
