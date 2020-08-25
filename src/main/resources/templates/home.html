@@ -24,7 +24,7 @@
         <ul th:each="project : ${projects}">
             <form th:action="@{/workspace}"  th:method="post">
                 <li th:text="${project.id} + ' ' + ${project.projectName}"></li>
-                <input th:hidden="${project.id}" th:value="${project.id}" name="id">
+                <input th:hidden="projectid" th:value="${project.id}" name="projectid">
                 <button type="submit">Перейти</button>
                 <!--<a th:href="@{/workspace}">Перейти</a>-->
             </form>

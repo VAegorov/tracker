@@ -7,11 +7,16 @@
     <title>Tracker</title>
 </head>
 <body>
-<h1 th:text="${project1.projectName}"></h1>
+<h1 th:text="${project.projectName}"></h1>
 <div>
-    <ul th:each="user : ${users}">
-        <li th:text="${user.username}"></li>
-    </ul>
+    <h2>Добавить участника проекта: </h2>
+    <form th:action="@{/addProjectUser}" th:method="post">
+        <p><select name="userid" size="1">
+            <option th:each="user : ${users}" th:utext="${user.username}" th:value="${user.id}"></option>
+            <input th:hidden="projectid" th:value="${project.id}" name="projectid">
+        </select>
+            <input type="submit" value="Добавить"></p>
+    </form>
 </div>
 </body>
 </html>
