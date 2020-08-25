@@ -53,7 +53,7 @@ public class HomeController {
         return "redirect:/main";
     }*/
 
-@PostMapping("/home")
+    @PostMapping("/home")
     public String addProject(@AuthenticationPrincipal User user, @RequestParam String projectName, Model model) {
         Project project = new Project(projectName, user);
         projectRepo.save(project);
@@ -66,10 +66,10 @@ public class HomeController {
     @GetMapping("/home")
     public String home(@AuthenticationPrincipal User user, Model model) {
 
-        Iterable<Project> ownerProjects = projectRepo.findAllWhereByIdOwner(user.getId());
+        Iterable<Project> ownerProjects = projectRepo.findByOwnerId(user.getId());
         model.addAttribute("ownerProjects", ownerProjects);
 
-        Iterable<Project> adminProjects = projectRepo.findAllWhereByIdAdmin(user.getId());
+        Iterable<Project> adminProjects = projectRepo.findByAdminId(user.getId());
         model.addAttribute("adminProjects", adminProjects);
 
         Iterable<Project> userProjects = projectRepo.findAllWhereByIdUser(user.getId());
