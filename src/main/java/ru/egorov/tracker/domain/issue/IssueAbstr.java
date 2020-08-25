@@ -1,3 +1,4 @@
+/*
 package ru.egorov.tracker.domain.issue;
 
 import org.springframework.stereotype.Component;
@@ -49,3 +50,4 @@ public abstract class IssueAbstr {
         this.id = id;
     }
 }
+*/

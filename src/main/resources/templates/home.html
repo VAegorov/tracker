@@ -14,7 +14,7 @@
     </div>
     <div>
         <form th:action="@{/home}" method="post">
-            <input type="text" name="projectname" placeholder="Добавьте проект">
+            <input type="text" name="projectName" placeholder="Добавьте проект">
 
             <button type="submit">Добавить</button>
         </form>
@@ -24,7 +24,7 @@
         <caption>Проекты</caption>
         <tr th:each="project : ${projects}">
             <td th:text="${project.id}"></td>
-            <td th:text="${project.projectname}"></td>
+            <td th:text="${project.projectName}"></td>
             <!--<td th:text="${project.OwnerName}"></td>-->
         </tr>
     </table>

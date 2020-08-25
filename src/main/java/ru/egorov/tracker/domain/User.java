@@ -4,13 +4,13 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.io.Serializable;
+import java.util.*;
 
 @Entity
 @Table(name="usr")
-public class User implements UserDetails {
+//@Embeddable
+public class User implements UserDetails, Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -18,8 +18,18 @@ public class User implements UserDetails {
     private String password;
     private boolean active;
 
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Project> projects;
+    //@ElementCollection(targetClass = Project.class, fetch = FetchType.EAGER)
+    //@CollectionTable(name = "usr_project", joinColumns = @JoinColumn(name = "usr_id"))
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+
+    private Set<Project> projects = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(name = "project_user_role",
+            joinColumns = @JoinColumn(name = "usr_id"),
+            inverseJoinColumns = @JoinColumn(name = "project_id")
+    )
+    private Set<Project> projectsUser = new HashSet<>();
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "usr_role", joinColumns = @JoinColumn(name = "usr_id"))
@@ -104,5 +114,26 @@ public class User implements UserDetails {
 
     public void setProjects(Set<Project> projects) {
         this.projects = projects;
+    }
+
+    public Set<Project> getProjectsUser() {
+        return projectsUser;
+    }
+
+    public void setProjectsUser(Set<Project> projectsUser) {
+        this.projectsUser = projectsUser;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        User user = (User) o;
+        return getId().equals(user.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }

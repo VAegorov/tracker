@@ -8,10 +8,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.egorov.tracker.domain.Project;
+//import ru.egorov.tracker.domain.ProjectUsers;
 import ru.egorov.tracker.domain.User;
-import ru.egorov.tracker.domain.issue.Issue;
-import ru.egorov.tracker.repos.IssueRepo;
+/*import ru.egorov.tracker.domain.issue.Issue;
+import ru.egorov.tracker.repos.IssueRepo;*/
 import ru.egorov.tracker.repos.ProjectRepo;
+import ru.egorov.tracker.repos.UserRepo;
+//import ru.egorov.tracker.repos.ProjectUsersRepo;
 
 import java.util.Collection;
 import java.util.List;
@@ -19,11 +22,17 @@ import java.util.Optional;
 
 @Controller
 public class HomeController {
-    @Autowired
-    private IssueRepo issueRepo;
+    /*@Autowired
+    private IssueRepo issueRepo;*/
 
     @Autowired
     private ProjectRepo projectRepo;
+
+    @Autowired
+    private UserRepo userRepo;
+
+   /* @Autowired
+    private ProjectUsersRepo projectUsersRepo;*/
 
     @GetMapping("/")
     public String in() {
@@ -31,7 +40,7 @@ public class HomeController {
         return "in";
     }
 
-    @GetMapping("/main")
+    /*@GetMapping("/main")
     public String main(Model model) {
         Iterable<Issue> issues = issueRepo.findAll();
         model.addAttribute("issues", issues);
@@ -45,12 +54,20 @@ public class HomeController {
         issueRepo.save(issue);
 
         return "redirect:/main";
-    }
+    }*/
 
 @PostMapping("/home")
-    public String addProject(@AuthenticationPrincipal User user, @RequestParam String projectname, Model model) {
-        Project project = new Project(projectname, user);
+    public String addProject(@AuthenticationPrincipal User user, @RequestParam String projectName, Model model) {
+        Project project = new Project(projectName, user);
         projectRepo.save(project);
+        user.getProjects().add(project);
+        userRepo.save(user);
+        //userRepo.flush();
+        //create table from user_project and include owner
+        /*ProjectUsers projectUsers = new ProjectUsers(project);
+        projectUsersRepo.save(projectUsers);*/
+
+
 
         return "redirect:/home";
     }
@@ -58,8 +75,10 @@ public class HomeController {
     @GetMapping("/home")
     public String home(@AuthenticationPrincipal User user, Model model) {
         //Iterable<Project> projects = projectRepo.findAll();
-        Iterable<Project> projects = projectRepo.findAllWhereById(user.getId());
+        //если user является создателем или участником project
+       // if (user.equals())
 
+        Iterable<Project> projects = projectRepo.findAllWhereById(user.getId());
         model.addAttribute("projects", projects);
         //Iterable<Project> projects = projectRepo.findAllWhereById(user.getId());
        /* if (!user.getProjects().isEmpty()) {
@@ -67,8 +86,6 @@ public class HomeController {
             System.out.println(777);
             model.addAttribute("projects", projects);
         }*/
-
-
         return "home";
     }
 }

@@ -1,3 +1,4 @@
+/*
 package ru.egorov.tracker.domain.issue;
 
 import javax.persistence.Entity;
@@ -26,6 +27,7 @@ public class Issue extends IssueAbstr{
     public void setDescription(String description) {
         this.description = description;
     }
+*/
 /*public Long getId() {
         return id;
     }
@@ -40,5 +42,7 @@ public class Issue extends IssueAbstr{
 
     public void setName(String name) {
         this.name = name;
-    }*/
+    }*//*
+
 }
+*/
