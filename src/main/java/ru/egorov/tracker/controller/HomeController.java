@@ -80,6 +80,8 @@ public class HomeController {
 
         Iterable<Project> projects = projectRepo.findAllWhereById(user.getId());
         model.addAttribute("projects", projects);
+
+
         //Iterable<Project> projects = projectRepo.findAllWhereById(user.getId());
        /* if (!user.getProjects().isEmpty()) {
             Iterable<Project> projects = user.getProjects();

@@ -8,26 +8,29 @@
 </head>
 <body>
     <div>
-        <form th:action="@{/logout}" method="post">
+        <form th:action="@{/logout}" th:method="post">
             <input type="submit" value="Sign Out"/>
         </form>
     </div>
     <div>
-        <form th:action="@{/home}" method="post">
+        <form th:action="@{/home}"  th:method="post">
             <input type="text" name="projectName" placeholder="Добавьте проект">
-
             <button type="submit">Добавить</button>
         </form>
     </div>
 
-    <table>
-        <caption>Проекты</caption>
-        <tr th:each="project : ${projects}">
-            <td th:text="${project.id}"></td>
-            <td th:text="${project.projectName}"></td>
-            <!--<td th:text="${project.OwnerName}"></td>-->
-        </tr>
-    </table>
+    <div>
+        <h3>Проекты</h3>
+        <ul th:each="project : ${projects}">
+            <form th:action="@{/workspace}"  th:method="post">
+                <li th:text="${project.id} + ' ' + ${project.projectName}"></li>
+                <input th:hidden="${project.id}" th:value="${project.id}" name="id">
+                <button type="submit">Перейти</button>
+                <!--<a th:href="@{/workspace}">Перейти</a>-->
+            </form>
+        </ul>
+    </div>
+
 
 
 
