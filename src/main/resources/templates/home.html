@@ -42,7 +42,7 @@
             </ul>
         </div>
     <div>
-            <h3>Проекты, где вы исполнитель:</h3>
+            <h3>Проекты, где вы участник:</h3>
             <ul th:each="project : ${userProjects}">
                 <form th:action="@{/workspace}"  th:method="post">
                     <li th:text="${project.id} + ' ' + ${project.projectName}"></li>

@@ -1,5 +1,7 @@
 package ru.egorov.tracker.domain;
 
+import ru.egorov.tracker.domain.issue.Issue;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashMap;
@@ -35,6 +37,8 @@ public class Project implements Serializable {
     )
     private Set<User> users = new HashSet<>();
 
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private Set<Issue> issues = new HashSet<>();
 
     public Project() {
     }
@@ -87,5 +91,13 @@ public class Project implements Serializable {
 
     public void setAdmin(User admin) {
         this.admin = admin;
+    }
+
+    public Set<Issue> getIssues() {
+        return issues;
+    }
+
+    public void setIssues(Set<Issue> issues) {
+        this.issues = issues;
     }
 }

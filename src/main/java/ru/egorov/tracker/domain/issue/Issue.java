@@ -1,5 +1,6 @@
-/*
 package ru.egorov.tracker.domain.issue;
+
+import ru.egorov.tracker.domain.User;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,8 +16,8 @@ public class Issue extends IssueAbstr{
     public Issue() {
     }
 
-    public Issue(String name, String description) {
-        super(name);
+    public Issue(String name, String description, User creator) {
+        super(name, creator);
         this.description = description;
     }
 
@@ -27,8 +28,8 @@ public class Issue extends IssueAbstr{
     public void setDescription(String description) {
         this.description = description;
     }
-*/
-/*public Long getId() {
+
+    /*public Long getId() {
         return id;
     }
 
@@ -42,7 +43,6 @@ public class Issue extends IssueAbstr{
 
     public void setName(String name) {
         this.name = name;
-    }*//*
+    }*/
 
 }
-*/

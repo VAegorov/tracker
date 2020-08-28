@@ -1,5 +1,6 @@
 package ru.egorov.tracker.controller;
 
+import antlr.ASTNULLType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -8,6 +9,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.egorov.tracker.domain.Project;
 import ru.egorov.tracker.domain.User;
+import ru.egorov.tracker.domain.issue.Issue;
+import ru.egorov.tracker.repos.IssueRepo;
 import ru.egorov.tracker.repos.ProjectRepo;
 import ru.egorov.tracker.repos.UserRepo;
 
@@ -19,25 +22,35 @@ public class WorkspaceController {
     @Autowired
     private UserRepo userRepo;
 
+    @Autowired
+    private IssueRepo issueRepo;
+
     @PostMapping("/workspace")
     public String inWorkspace(@AuthenticationPrincipal User user, @RequestParam Long projectid, Model model) {
         Project project = projectRepo.findById(projectid).get();
-        //Project project1 = project.get();
-        //Long idp = project.get().getId();
-
         model.addAttribute("project", project);
 
-        Iterable<User> users = userRepo.findAll();
-        model.addAttribute("users", users);
+        Iterable<Issue> issues = issueRepo.findAllByIdCreator(user.getId());
+        model.addAttribute("issues", issues);
 
         return "/workspace";
     }
 
-    /*@GetMapping("/workspace")
-    public String homeWorkspace(@AuthenticationPrincipal User user, @RequestParam Long projectid, Model model) {
+    @PostMapping("/addissue")
+    public String addIssue(@AuthenticationPrincipal User user, @RequestParam Long projectid,
+                           @RequestParam String issueName, @RequestParam String issueDescription, Model model) {
+        Project project = projectRepo.findById(projectid).get();
 
-        return "workspace";
-    }*/
+        Issue issue = new Issue(issueName, issueDescription, user);
+        project.getIssues().add(issue);
+        projectRepo.save(project);
+
+        Iterable<Issue> issues = issueRepo.findAllByIdCreator(user.getId());
+        model.addAttribute("issues", issues);
+        model.addAttribute("project", project);
+
+        return "/workspace";
+    }
 
     @PostMapping("/addProjectUser")
     public String addProjectUser(@AuthenticationPrincipal User user,

@@ -9,6 +9,30 @@
 <body>
 <h1 th:text="${project.projectName}"></h1>
 <div>
+    <form th:action="@{/logout}" method="post">
+        <input type="submit" value="Sign Out"/>
+    </form>
+</div>
+<div>
+    <form th:action="@{/addissue}" method="post">
+        <input type="text" name="issueName" placeholder="Добавьте задачу">
+        <input type="text" name="issueDescription" placeholder="Добавьте описание">
+        <input th:hidden="projectid" th:value="${project.id}" name="projectid">
+        <button type="submit">Добавить</button>
+    </form>
+</div>
+
+<table>
+    <caption>Задачи</caption>
+    <tr th:each="issue : ${issues}">
+        <td th:text="${issue.id}"></td>
+        <td th:text="${issue.name}"></td>
+        <td th:text="${issue.description}"></td>
+        <td th:text="${issue.creator.getUsername()}"></td>
+        <td th:text="${issue.date}"></td>
+    </tr>
+</table>
+<div>
     <h2>Добавить участника проекта: </h2>
     <form th:action="@{/addProjectUser}" th:method="post">
         <p><select name="userid" size="1">
