@@ -55,10 +55,12 @@ public class HomeController {
 
     @PostMapping("/home")
     public String addProject(@AuthenticationPrincipal User user, @RequestParam String projectName, Model model) {
-        Project project = new Project(projectName, user);
-        projectRepo.save(project);
-        user.getProjectsOwner().add(project);
-        userRepo.save(user);
+        if (!projectName.isEmpty()) {
+            Project project = new Project(projectName, user);
+            projectRepo.save(project);
+            user.getProjectsOwner().add(project);
+            userRepo.save(user);
+        }
 
         return "redirect:/home";
     }

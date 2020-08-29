@@ -17,8 +17,9 @@ public class Issue extends IssueAbstr{
     public Issue() {
     }
 
-    public Issue(String name, String description, User creator, Project project) {
-        super(name, creator, project);
+    public Issue(String name, String description, User creator, Project project,
+                 IssuePriority issuePriority, IssueStatus issueStatus) {
+        super(name, creator, project, issuePriority, issueStatus);
         this.description = description;
     }
 

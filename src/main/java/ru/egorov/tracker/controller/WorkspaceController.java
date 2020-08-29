@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import ru.egorov.tracker.domain.Project;
 import ru.egorov.tracker.domain.User;
 import ru.egorov.tracker.domain.issue.Issue;
+import ru.egorov.tracker.domain.issue.IssuePriority;
+import ru.egorov.tracker.domain.issue.IssueStatus;
 import ru.egorov.tracker.repos.IssueRepo;
 import ru.egorov.tracker.repos.ProjectRepo;
 import ru.egorov.tracker.repos.UserRepo;
@@ -38,6 +40,12 @@ public class WorkspaceController {
         Iterable<User> users = userRepo.findNewUser(projectid);
         model.addAttribute("users", users);
 
+        IssuePriority[] issuePriorities = IssuePriority.values();
+        model.addAttribute("issuePriorities", issuePriorities);
+
+        IssueStatus[] issueStatuses = IssueStatus.values();
+        model.addAttribute("issueStatuses", issueStatuses);
+
         isEditor = false;
         if (project.isOwner(user) || project.isAdmin(user)) {
             System.out.println("user: " + user.toString());
@@ -52,12 +60,16 @@ public class WorkspaceController {
 
     @PostMapping("/addissue")
     public String addIssue(@AuthenticationPrincipal User user, @RequestParam Long projectid,
-                           @RequestParam String issueName, @RequestParam String issueDescription, Model model) {
+                           @RequestParam String issueName, @RequestParam String issueDescription,
+                           @RequestParam IssuePriority issuePriority, @RequestParam IssueStatus issueStatus,
+                           Model model) {
         Project project = projectRepo.findById(projectid).get();
 
-        Issue issue = new Issue(issueName, issueDescription, user, project);
-        project.getIssues().add(issue);
-        projectRepo.save(project);
+        if (!issueName.isEmpty() && !issueDescription.isEmpty()) {
+            Issue issue = new Issue(issueName, issueDescription, user, project, issuePriority, issueStatus);
+            project.getIssues().add(issue);
+            projectRepo.save(project);
+        }
 
         Iterable<Issue> issues = issueRepo.findAllByProjectId(projectid);
         model.addAttribute("issues", issues);
@@ -65,6 +77,12 @@ public class WorkspaceController {
 
         Iterable<User> users = userRepo.findNewUser(projectid);
         model.addAttribute("users", users);
+
+        IssuePriority[] issuePriorities = IssuePriority.values();
+        model.addAttribute("issuePriorities", issuePriorities);
+
+        IssueStatus[] issueStatuses = IssueStatus.values();
+        model.addAttribute("issueStatuses", issueStatuses);
 
         isEditor = false;
         if (project.isOwner(user) || project.isAdmin(user)) {
@@ -93,6 +111,12 @@ public class WorkspaceController {
 
         Iterable<User> users = userRepo.findNewUser(projectid);
         model.addAttribute("users", users);
+
+        IssuePriority[] issuePriorities = IssuePriority.values();
+        model.addAttribute("issuePriorities", issuePriorities);
+
+        IssueStatus[] issueStatuses = IssueStatus.values();
+        model.addAttribute("issueStatuses", issueStatuses);
 
         isEditor = false;
         if (project.isOwner(user) || project.isAdmin(user)) {

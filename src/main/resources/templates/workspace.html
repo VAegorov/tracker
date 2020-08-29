@@ -7,6 +7,7 @@
     <title>Tracker</title>
 </head>
 <body>
+<a th:href="@{/home}">Все проекты</a>
 <h1 th:text="${project.projectName}"></h1>
 <div>
     <form th:action="@{/logout}" method="post">
@@ -17,6 +18,12 @@
     <form th:action="@{/addissue}" method="post">
         <input type="text" name="issueName" placeholder="Добавьте задачу">
         <input type="text" name="issueDescription" placeholder="Добавьте описание">
+        <select name="issuePriority" size="1">
+            <option th:each="priority : ${issuePriorities}" th:utext="${priority}" th:value="${priority}"></option>
+        </select>
+        <select name="issueStatus" size="1">
+            <option th:each="issueStatus : ${issueStatuses}" th:utext="${issueStatus}" th:value="${issueStatus}"></option>
+        </select>
         <input th:hidden="projectid" th:value="${project.id}" name="projectid">
         <button type="submit">Добавить</button>
     </form>
@@ -29,6 +36,8 @@
         <td th:text="${issue.name}"></td>
         <td th:text="${issue.description}"></td>
         <td th:text="${issue.creator.getUsername()}"></td>
+        <td th:text="${issue.issuePriority}"></td>
+        <td th:text="${issue.issueStatus}"></td>
         <td th:text="${issue.date}"></td>
     </tr>
 </table>

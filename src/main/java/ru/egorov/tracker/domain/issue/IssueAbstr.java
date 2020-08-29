@@ -27,17 +27,23 @@ public abstract class IssueAbstr {
     @JoinColumn(name = "project", referencedColumnName = "id")
     private Project project;
 
+    @Enumerated(EnumType.STRING)
+    private IssuePriority issuePriority;
 
+    @Enumerated(EnumType.STRING)
+    private IssueStatus issueStatus;
 
     public IssueAbstr() {
     }
 
-    public IssueAbstr(String name, User creator, Project project) {
+    public IssueAbstr(String name, User creator, Project project,
+                      IssuePriority issuePriority, IssueStatus issueStatus) {
         this.project = project;
         this.name = name;
         this.creator = creator;
         this.date = new Date();
-
+        this.issuePriority = issuePriority;
+        this.issueStatus = issueStatus;
     }
 
     public Date getDate() {
@@ -70,5 +76,29 @@ public abstract class IssueAbstr {
 
     public void setCreator(User creator) {
         this.creator = creator;
+    }
+
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
+    }
+
+    public IssuePriority getIssuePriority() {
+        return issuePriority;
+    }
+
+    public void setIssuePriority(IssuePriority issuePriority) {
+        this.issuePriority = issuePriority;
+    }
+
+    public IssueStatus getIssueStatus() {
+        return issueStatus;
+    }
+
+    public void setIssueStatus(IssueStatus issueStatus) {
+        this.issueStatus = issueStatus;
     }
 }
