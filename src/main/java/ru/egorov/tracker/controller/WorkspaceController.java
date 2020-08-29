@@ -14,6 +14,8 @@ import ru.egorov.tracker.repos.IssueRepo;
 import ru.egorov.tracker.repos.ProjectRepo;
 import ru.egorov.tracker.repos.UserRepo;
 
+import java.util.Optional;
+
 @Controller
 public class WorkspaceController {
     @Autowired
@@ -30,8 +32,12 @@ public class WorkspaceController {
         Project project = projectRepo.findById(projectid).get();
         model.addAttribute("project", project);
 
-        Iterable<Issue> issues = issueRepo.findAllByIdCreator(user.getId());
+        Iterable<Issue> issues = issueRepo.findAllByProjectId(projectid);
         model.addAttribute("issues", issues);
+
+        //Iterable<User> users = userRepo.findAll();
+        Iterable<User> users = userRepo.findNewUser(projectid);
+        model.addAttribute("users", users);
 
         return "/workspace";
     }
@@ -41,13 +47,17 @@ public class WorkspaceController {
                            @RequestParam String issueName, @RequestParam String issueDescription, Model model) {
         Project project = projectRepo.findById(projectid).get();
 
-        Issue issue = new Issue(issueName, issueDescription, user);
+        Issue issue = new Issue(issueName, issueDescription, user, project);
         project.getIssues().add(issue);
         projectRepo.save(project);
 
-        Iterable<Issue> issues = issueRepo.findAllByIdCreator(user.getId());
+        Iterable<Issue> issues = issueRepo.findAllByProjectId(projectid);
         model.addAttribute("issues", issues);
         model.addAttribute("project", project);
+
+        //Iterable<User> users = userRepo.findAll();
+        Iterable<User> users = userRepo.findNewUser(projectid);
+        model.addAttribute("users", users);
 
         return "/workspace";
     }
@@ -64,9 +74,12 @@ public class WorkspaceController {
         newUser.getProjectsUser().add(project);
         userRepo.save(newUser);
 
+        Iterable<Issue> issues = issueRepo.findAllByProjectId(projectid);
+        model.addAttribute("issues", issues);
         model.addAttribute("project", project);
 
-        Iterable<User> users = userRepo.findAll();
+        //Iterable<User> users = userRepo.findAll();
+        Iterable<User> users = userRepo.findNewUser(projectid);
         model.addAttribute("users", users);
 
         return "/workspace";

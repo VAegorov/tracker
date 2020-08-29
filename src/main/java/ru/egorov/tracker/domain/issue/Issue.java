@@ -1,5 +1,6 @@
 package ru.egorov.tracker.domain.issue;
 
+import ru.egorov.tracker.domain.Project;
 import ru.egorov.tracker.domain.User;
 
 import javax.persistence.Entity;
@@ -16,8 +17,8 @@ public class Issue extends IssueAbstr{
     public Issue() {
     }
 
-    public Issue(String name, String description, User creator) {
-        super(name, creator);
+    public Issue(String name, String description, User creator, Project project) {
+        super(name, creator, project);
         this.description = description;
     }
 

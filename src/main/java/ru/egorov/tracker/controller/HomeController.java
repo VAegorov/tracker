@@ -75,7 +75,6 @@ public class HomeController {
         Iterable<Project> userProjects = projectRepo.findAllWhereByIdUser(user.getId());
         model.addAttribute("userProjects", userProjects);
 
-
         return "home";
     }
 }

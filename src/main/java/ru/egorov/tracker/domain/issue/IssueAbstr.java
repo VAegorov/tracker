@@ -15,6 +15,7 @@ public abstract class IssueAbstr {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
+
     @Temporal(TemporalType.DATE)
     private Date date;
 
@@ -23,7 +24,7 @@ public abstract class IssueAbstr {
     private User creator;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "project_id")
+    @JoinColumn(name = "project", referencedColumnName = "id")
     private Project project;
 
 
@@ -31,7 +32,8 @@ public abstract class IssueAbstr {
     public IssueAbstr() {
     }
 
-    public IssueAbstr(String name, User creator) {
+    public IssueAbstr(String name, User creator, Project project) {
+        this.project = project;
         this.name = name;
         this.creator = creator;
         this.date = new Date();

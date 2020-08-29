@@ -4,10 +4,7 @@ import ru.egorov.tracker.domain.issue.Issue;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "project")
@@ -45,6 +42,7 @@ public class Project implements Serializable {
 
     public Project(String projectName, User user) {
         this.owner = user;
+        this.admin = user;
         System.out.println("Created new project!");
         this.projectName = projectName;
     }
@@ -99,5 +97,18 @@ public class Project implements Serializable {
 
     public void setIssues(Set<Issue> issues) {
         this.issues = issues;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Project)) return false;
+        Project project = (Project) o;
+        return Objects.equals(getId(), project.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }

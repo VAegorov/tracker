@@ -8,4 +8,6 @@ public interface IssueRepo extends JpaRepository<Issue, Long> {
 
     @Query(value = "SELECT * FROM issue where creator=?", nativeQuery = true)
     Iterable<Issue> findAllByIdCreator(Long id);
+
+    Iterable<Issue> findAllByProjectId(Long id);
 }
