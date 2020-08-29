@@ -1,6 +1,5 @@
 package ru.egorov.tracker.controller;
 
-import antlr.ASTNULLType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -18,6 +17,7 @@ import java.util.Optional;
 
 @Controller
 public class WorkspaceController {
+    boolean isEditor;
     @Autowired
     private ProjectRepo projectRepo;
 
@@ -35,9 +35,17 @@ public class WorkspaceController {
         Iterable<Issue> issues = issueRepo.findAllByProjectId(projectid);
         model.addAttribute("issues", issues);
 
-        //Iterable<User> users = userRepo.findAll();
         Iterable<User> users = userRepo.findNewUser(projectid);
         model.addAttribute("users", users);
+
+        isEditor = false;
+        if (project.isOwner(user) || project.isAdmin(user)) {
+            System.out.println("user: " + user.toString());
+            System.out.println("owner: " + project.getOwner().toString());
+            System.out.println("admin: " + project.getAdmin().toString());
+            isEditor = true;
+        }
+        model.addAttribute("isEditor", isEditor);
 
         return "/workspace";
     }
@@ -55,9 +63,14 @@ public class WorkspaceController {
         model.addAttribute("issues", issues);
         model.addAttribute("project", project);
 
-        //Iterable<User> users = userRepo.findAll();
         Iterable<User> users = userRepo.findNewUser(projectid);
         model.addAttribute("users", users);
+
+        isEditor = false;
+        if (project.isOwner(user) || project.isAdmin(user)) {
+            isEditor = true;
+        }
+        model.addAttribute("isEditor", isEditor);
 
         return "/workspace";
     }
@@ -78,9 +91,14 @@ public class WorkspaceController {
         model.addAttribute("issues", issues);
         model.addAttribute("project", project);
 
-        //Iterable<User> users = userRepo.findAll();
         Iterable<User> users = userRepo.findNewUser(projectid);
         model.addAttribute("users", users);
+
+        isEditor = false;
+        if (project.isOwner(user) || project.isAdmin(user)) {
+            isEditor = true;
+        }
+        model.addAttribute("isEditor", isEditor);
 
         return "/workspace";
     }

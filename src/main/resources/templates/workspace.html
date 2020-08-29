@@ -32,7 +32,7 @@
         <td th:text="${issue.date}"></td>
     </tr>
 </table>
-<div>
+<div th:if="${isEditor}">
     <h2>Добавить участника проекта: </h2>
     <form th:action="@{/addProjectUser}" th:method="post">
         <p><select name="userid" size="1">

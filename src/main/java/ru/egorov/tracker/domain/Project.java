@@ -99,6 +99,14 @@ public class Project implements Serializable {
         this.issues = issues;
     }
 
+    public boolean isOwner(User user) {
+        return this.getOwner().equals(user);
+    }
+
+    public boolean isAdmin(User user) {
+        return this.getAdmin().equals(user);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
