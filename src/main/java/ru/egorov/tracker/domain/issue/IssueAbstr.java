@@ -5,16 +5,19 @@ import ru.egorov.tracker.domain.Project;
 import ru.egorov.tracker.domain.User;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 
 @Entity
 @Inheritance( strategy = InheritanceType.TABLE_PER_CLASS )
-public abstract class IssueAbstr {
+public abstract class IssueAbstr implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
+
+    private String description;
 
     @Temporal(TemporalType.DATE)
     private Date date;
@@ -22,10 +25,6 @@ public abstract class IssueAbstr {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "creator", referencedColumnName = "id")
     private User creator;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "project", referencedColumnName = "id")
-    private Project project;
 
     @Enumerated(EnumType.STRING)
     private IssuePriority issuePriority;
@@ -36,14 +35,14 @@ public abstract class IssueAbstr {
     public IssueAbstr() {
     }
 
-    public IssueAbstr(String name, User creator, Project project,
-                      IssuePriority issuePriority, IssueStatus issueStatus) {
-        this.project = project;
+    public IssueAbstr(String name, User creator, IssuePriority issuePriority,
+                      IssueStatus issueStatus, String description) {
         this.name = name;
         this.creator = creator;
         this.date = new Date();
         this.issuePriority = issuePriority;
         this.issueStatus = issueStatus;
+        this.description = description;
     }
 
     public Date getDate() {
@@ -78,14 +77,6 @@ public abstract class IssueAbstr {
         this.creator = creator;
     }
 
-    public Project getProject() {
-        return project;
-    }
-
-    public void setProject(Project project) {
-        this.project = project;
-    }
-
     public IssuePriority getIssuePriority() {
         return issuePriority;
     }
@@ -100,5 +91,13 @@ public abstract class IssueAbstr {
 
     public void setIssueStatus(IssueStatus issueStatus) {
         this.issueStatus = issueStatus;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

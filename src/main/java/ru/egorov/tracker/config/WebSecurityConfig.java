@@ -11,9 +11,7 @@ import ru.egorov.tracker.service.UserService;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    /*@Autowired
-    private DataSource dataSource;
-    @Autowired*/
+
     private UserService userService;
 
     public WebSecurityConfig(UserService userService) {
@@ -34,19 +32,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .logout()
                     .permitAll();
     }
-
-    /*@Bean
-    @Override
-    public UserDetailsService userDetailsService() {
-        UserDetails user =
-                User.withDefaultPasswordEncoder()
-                        .username("u")
-                        .password("p")
-                        .roles("USER")
-                        .build();
-
-        return new InMemoryUserDetailsManager(user);
-    }*/
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {

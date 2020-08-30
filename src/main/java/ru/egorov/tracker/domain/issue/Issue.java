@@ -3,48 +3,42 @@ package ru.egorov.tracker.domain.issue;
 import ru.egorov.tracker.domain.Project;
 import ru.egorov.tracker.domain.User;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-public class Issue extends IssueAbstr{
-
-    //private String name;
-    private String description;
+@Table(name = "issue")
+public class Issue extends IssueAbstr {
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "project", referencedColumnName = "id")
+    private Project project;
+    @OneToMany(mappedBy = "issue", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    public Set<SubIssue> subIssues = new HashSet<>();
 
     public Issue() {
     }
 
     public Issue(String name, String description, User creator, Project project,
                  IssuePriority issuePriority, IssueStatus issueStatus) {
-        super(name, creator, project, issuePriority, issueStatus);
-        this.description = description;
+        super(name, creator, issuePriority, issueStatus, description);
+        this.project = project;
     }
 
-    public String getDescription() {
-        return description;
+    public Project getProject() {
+        return project;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setProject(Project project) {
+        this.project = project;
     }
 
-    /*public Long getId() {
-        return id;
+    public Set<SubIssue> getSubIssues() {
+        return subIssues;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setSubIssues(Set<SubIssue> subIssues) {
+        this.subIssues = subIssues;
     }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }*/
-
 }

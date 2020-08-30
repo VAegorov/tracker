@@ -19,12 +19,10 @@ public class Project implements Serializable {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "owner", referencedColumnName = "id")
-    //@Column(name = "owner")
     private User owner;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "admin", referencedColumnName = "id")
-    //@Column(name = "admin")
     private User admin;
 
     @ManyToMany
