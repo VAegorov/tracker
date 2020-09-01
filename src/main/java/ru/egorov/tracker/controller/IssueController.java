@@ -10,6 +10,8 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.View;
 import ru.egorov.tracker.domain.Project;
 import ru.egorov.tracker.domain.issue.Issue;
+import ru.egorov.tracker.domain.issue.IssuePriority;
+import ru.egorov.tracker.domain.issue.IssueStatus;
 import ru.egorov.tracker.repos.IssueRepo;
 import ru.egorov.tracker.repos.ProjectRepo;
 
@@ -31,20 +33,63 @@ public class IssueController {
         Project project = issue.getProject();
         model.addAttribute(project);
 
+        IssuePriority[] issuePriorities = IssuePriority.values();
+        model.addAttribute("issuePriorities", issuePriorities);
+
+        IssueStatus[] issueStatuses = IssueStatus.values();
+        model.addAttribute("issueStatuses", issueStatuses);
+
         return "/issue";
 
     }
 
     @PostMapping("/editissue")
-    ModelAndView issuePage(@RequestParam Long issueId, @RequestParam String issueName, HttpServletRequest request) {
-        if (!issueName.isEmpty()) {
+    String issuePage(@RequestParam Long issueId, @RequestParam String issueName,
+                           @RequestParam String issueDescription, @RequestParam IssuePriority issuePriority,
+                           @RequestParam IssueStatus issueStatus, Model model) {
+        if (!issueName.isEmpty() || !issueDescription.isEmpty()) {
             Issue issue = issueRepo.findById(issueId).get();
+            issue.setIssueStatus(issueStatus);
             issue.setName(issueName);
+            issue.setDescription(issueDescription);
+            issue.setIssuePriority(issuePriority);
+
+            issueRepo.save(issue);
+        }
+
+        Issue issue = issueRepo.findById(issueId).get();
+        model.addAttribute(issue);
+
+        Project project = issue.getProject();
+        model.addAttribute(project);
+
+        IssuePriority[] issuePriorities = IssuePriority.values();
+        model.addAttribute("issuePriorities", issuePriorities);
+
+        IssueStatus[] issueStatuses = IssueStatus.values();
+        model.addAttribute("issueStatuses", issueStatuses);
+
+
+        return "/issue";
+    }
+
+   /* @PostMapping("/editissue")
+    ModelAndView issuePage(@RequestParam Long issueId, @RequestParam String issueName,
+                           @RequestParam String issueDescription, @RequestParam IssuePriority issuePriority,
+                           @RequestParam IssueStatus issueStatus, HttpServletRequest request) {
+        if (!issueName.isEmpty() || !issueDescription.isEmpty()) {
+            Issue issue = issueRepo.findById(issueId).get();
+            issue.setIssueStatus(issueStatus);
+            issue.setName(issueName);
+            issue.setDescription(issueDescription);
+            issue.setIssuePriority(issuePriority);
+
             issueRepo.save(issue);
         }
 
         request.setAttribute(View.RESPONSE_STATUS_ATTRIBUTE, HttpStatus.TEMPORARY_REDIRECT);
 
         return new ModelAndView("redirect:/issue");
-    }
+    }*/
+
 }

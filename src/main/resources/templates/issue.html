@@ -11,7 +11,7 @@
     <div>
         <form th:action="@{/workspace}" th:method="post">
             <button>Вернуться на проект</button>
-            <input th:hidden="projectid" th:value="${project.id}" name="projectId">
+            <input th:hidden="projectId" th:value="${project.id}" name="projectId">
         </form>
     </div>
     <div>
@@ -22,13 +22,13 @@
     <h2>Редактирование задачи</h2>
     <form th:action="@{/editissue}" method="post">
         <input type="text" name="issueName" th:value="${issue.name}">
-        <!--<td th:text="${issue.id}"></td>
-        <td th:text="${issue.name}"></td>
-        <td th:text="${issue.description}"></td>
-        <td th:text="${issue.creator.getUsername()}"></td>
-        <td th:text="${issue.issuePriority}"></td>
-        <td th:text="${issue.issueStatus}"></td>
-        <td th:text="${issue.date}"></td>-->
+        <input type="text" name="issueDescription" th:value="${issue.description}">
+        <select name="issuePriority" size="1">
+            <option th:each="issuePriority : ${issuePriorities}" th:utext="${issuePriority}" th:value="${issuePriority}" th:selected="${issuePriority==issue.issuePriority}"></option>
+        </select>
+        <select name="issueStatus" size="1">
+            <option th:each="issueStatus : ${issueStatuses}" th:utext="${issueStatus}" th:value="${issueStatus}" th:selected="${issueStatus==issue.issueStatus}"></option>
+        </select>
         <input th:hidden="issueId" th:value="${issue.id}" name="issueId">
         <td><button>Сохранить</button></td>
     </form>
