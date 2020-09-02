@@ -16,9 +16,9 @@ public class SubIssue extends IssueAbstr{
     public SubIssue() {
     }
 
-    public SubIssue(String name, String description, User creator,
+    public SubIssue(String name, String description, User creator, User executor,
                     IssuePriority issuePriority, IssueStatus issueStatus, Issue issue) {
-        super(name, creator, issuePriority, issueStatus, description);
+        super(name, creator, executor, issuePriority, issueStatus, description);
         this.issue = issue;
     }
 

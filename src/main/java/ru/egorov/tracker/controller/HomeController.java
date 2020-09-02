@@ -14,13 +14,10 @@ import ru.egorov.tracker.domain.User;
 import ru.egorov.tracker.repos.IssueRepo;*/
 import ru.egorov.tracker.repos.ProjectRepo;
 import ru.egorov.tracker.repos.UserRepo;
-//import ru.egorov.tracker.repos.ProjectUsersRepo;
 
 
 @Controller
 public class HomeController {
-    /*@Autowired
-    private IssueRepo issueRepo;*/
 
     @Autowired
     private ProjectRepo projectRepo;
@@ -28,30 +25,11 @@ public class HomeController {
     @Autowired
     private UserRepo userRepo;
 
-   /* @Autowired
-    private ProjectUsersRepo projectUsersRepo;*/
-
     @GetMapping("/")
     public String in() {
 
         return "in";
     }
-
-    /*@GetMapping("/main")
-    public String main(Model model) {
-        Iterable<Issue> issues = issueRepo.findAll();
-        model.addAttribute("issues", issues);
-
-        return "main";
-    }
-
-    @PostMapping("/main")
-    public String addIssue(@RequestParam String issueName, String issueDescription, Model model) {
-        Issue issue = new Issue(issueName, issueDescription);
-        issueRepo.save(issue);
-
-        return "redirect:/main";
-    }*/
 
     @PostMapping("/home")
     public String addProject(@AuthenticationPrincipal User user, @RequestParam String projectName, Model model) {

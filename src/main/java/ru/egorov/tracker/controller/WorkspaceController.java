@@ -19,6 +19,7 @@ import ru.egorov.tracker.repos.ProjectRepo;
 import ru.egorov.tracker.repos.UserRepo;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashSet;
 
 @Controller
 public class WorkspaceController {
@@ -34,6 +35,11 @@ public class WorkspaceController {
     public String inWorkspace(@AuthenticationPrincipal User user, @RequestParam Long projectId, Model model) {
         Project project = projectRepo.findById(projectId).get();
         model.addAttribute("project", project);
+
+        HashSet<User> executors = project.allUsers();
+        model.addAttribute("executors", executors);
+
+        model.addAttribute("user", user);
 
         Iterable<Issue> issues = issueRepo.findAllByProjectId(projectId);
         model.addAttribute("issues", issues);
@@ -60,11 +66,11 @@ public class WorkspaceController {
     public ModelAndView addIssue(@AuthenticationPrincipal User user, @RequestParam Long projectId,
                                  @RequestParam String issueName, @RequestParam String issueDescription,
                                  @RequestParam IssuePriority issuePriority, @RequestParam IssueStatus issueStatus,
-                                 HttpServletRequest request) {
+                                 @RequestParam User executorId, HttpServletRequest request) {
         Project project = projectRepo.findById(projectId).get();
 
         if (!issueName.isEmpty() && !issueDescription.isEmpty()) {
-            Issue issue = new Issue(issueName, issueDescription, user, project, issuePriority, issueStatus);
+            Issue issue = new Issue(issueName, issueDescription, user, executorId, project, issuePriority, issueStatus);
             project.getIssues().add(issue);
             projectRepo.save(project);
         }

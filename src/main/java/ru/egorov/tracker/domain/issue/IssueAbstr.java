@@ -26,6 +26,10 @@ public abstract class IssueAbstr implements Serializable {
     @JoinColumn(name = "creator", referencedColumnName = "id")
     private User creator;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "executor", referencedColumnName = "id")
+    private User executor;
+
     @Enumerated(EnumType.STRING)
     private IssuePriority issuePriority;
 
@@ -35,10 +39,11 @@ public abstract class IssueAbstr implements Serializable {
     public IssueAbstr() {
     }
 
-    public IssueAbstr(String name, User creator, IssuePriority issuePriority,
+    public IssueAbstr(String name, User creator, User executor, IssuePriority issuePriority,
                       IssueStatus issueStatus, String description) {
         this.name = name;
         this.creator = creator;
+        this.executor = executor;
         this.date = new Date();
         this.issuePriority = issuePriority;
         this.issueStatus = issueStatus;
@@ -99,5 +104,13 @@ public abstract class IssueAbstr implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public User getExecutor() {
+        return executor;
+    }
+
+    public void setExecutor(User executor) {
+        this.executor = executor;
     }
 }

@@ -41,6 +41,9 @@ public class User implements UserDetails, Serializable {
     @OneToMany(mappedBy = "creator", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private Set<Issue> issueCreator = new HashSet<>();//задачи в которых он creator
 
+    @OneToMany(mappedBy = "executor", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private Set<Issue> issueExecutor = new HashSet<>();//задачи в которых он executor
+
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "usr_role", joinColumns = @JoinColumn(name = "usr_id"))
     @Enumerated(EnumType.STRING)

@@ -18,6 +18,9 @@
     <form th:action="@{/addissue}" method="post">
         <input type="text" name="issueName" placeholder="Добавьте задачу">
         <input type="text" name="issueDescription" placeholder="Добавьте описание">
+        <select name="executorId" size="1">
+            <option th:each="executor : ${executors}" th:utext="${executor.username}" th:value="${executor.id}" th:selected="${executor==user}"></option>
+        </select>
         <select name="issuePriority" size="1">
             <option th:each="priority : ${issuePriorities}" th:utext="${priority}" th:value="${priority}"></option>
         </select>
@@ -48,11 +51,12 @@
                 <td th:text="${issue.name}"></td>
                 <td th:text="${issue.description}"></td>
                 <td th:text="${issue.creator.getUsername()}"></td>
+                <!--<td th:text="${return issue.executor != null ? issue.executor.getUsername()}"></td>!!!!ВЕРНУТЬ ПРИ ОБНОВЛЕНИИ БД-->
                 <td th:text="${issue.issuePriority}"></td>
                 <td th:text="${issue.issueStatus}"></td>
                 <td th:text="${issue.date}"></td>
-                <td><button>Редактировать</button></td>
-                <input th:hidden="issueId" th:value="${issue.id}" name="issueId"><!--каша здесь-->
+                <td ><button>Редактировать</button></td>
+                <input th:hidden="issueId" th:value="${issue.id}" name="issueId">
             </form>
         </tr>
 

@@ -20,9 +20,9 @@ public class Issue extends IssueAbstr {
     public Issue() {
     }
 
-    public Issue(String name, String description, User creator, Project project,
+    public Issue(String name, String description, User creator, User executor, Project project,
                  IssuePriority issuePriority, IssueStatus issueStatus) {
-        super(name, creator, issuePriority, issueStatus, description);
+        super(name, creator, executor, issuePriority, issueStatus, description);
         this.project = project;
     }
 

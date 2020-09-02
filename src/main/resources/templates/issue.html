@@ -24,13 +24,38 @@
         <input type="text" name="issueName" th:value="${issue.name}">
         <input type="text" name="issueDescription" th:value="${issue.description}">
         <select name="issuePriority" size="1">
-            <option th:each="issuePriority : ${issuePriorities}" th:utext="${issuePriority}" th:value="${issuePriority}" th:selected="${issuePriority==issue.issuePriority}"></option>
+            <option th:each="issuePriority : ${issuePriorities}" th:utext="${issuePriority}" th:value="${issuePriority}"
+                    th:selected="${issuePriority==issue.issuePriority}"></option>
+        </select>
+        <select name="executorId" size="1">
+            <option th:each="executor : ${executors}" th:utext="${executor.username}" th:value="${executor.id}"
+                    th:selected="${executor==issue.executor}"></option>
         </select>
         <select name="issueStatus" size="1">
-            <option th:each="issueStatus : ${issueStatuses}" th:utext="${issueStatus}" th:value="${issueStatus}" th:selected="${issueStatus==issue.issueStatus}"></option>
+            <option th:each="issueStatus : ${issueStatuses}" th:utext="${issueStatus}" th:value="${issueStatus}"
+                    th:selected="${issueStatus==issue.issueStatus}"></option>
         </select>
-        <input th:hidden="issueId" th:value="${issue.id}" name="issueId">
-        <td><button>Сохранить</button></td>
+        <input th:if="${resolveEditIssue}" th:hidden="issueId" th:value="${issue.id}" name="issueId">
+        <button th:if="${resolveEditIssue}">Сохранить</button>
+        <span th:if="${resolveNoEditIssue}">Вы не можете редактировать эту задачу!</span>
+
+    </form>
+    <h2>Создать подзадачу</h2>
+    <form th:action="@{/addsubissue}" method="post">
+        <input type="text" name="issueName" placeholder="Добавьте подзадачу">
+        <input type="text" name="issueDescription" placeholder="Добавьте описание">
+        <select name="executorId" size="1">
+            <option th:each="executor : ${executors}" th:utext="${executor.username}" th:value="${executor.id}" th:selected="${executor==user}"></option>
+        </select>
+        <select name="issuePriority" size="1">
+            <option th:each="priority : ${issuePriorities}" th:utext="${priority}" th:value="${priority}"></option>
+        </select>
+        <select name="issueStatus" size="1">
+            <option th:each="issueStatus : ${issueStatuses}" th:utext="${issueStatus}" th:value="${issueStatus}"></option>
+        </select>
+        <input th:if="${resolveEditIssue}" th:hidden="issueId" th:value="${issue.id}" name="issueId">
+        <button th:if="${resolveEditIssue}">Добавить</button>
+        <span th:if="${resolveNoEditIssue}">Вы не можете создавать подзадачи!</span>
     </form>
 
 </body>

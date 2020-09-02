@@ -105,6 +105,15 @@ public class Project implements Serializable {
         return this.getAdmin().equals(user);
     }
 
+    public HashSet<User> allUsers() {
+        HashSet<User> users = new HashSet<>();
+        users.add(owner);
+        users.add(admin);
+        users.addAll(this.users);
+
+        return users;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
