@@ -39,6 +39,7 @@
         <td>Название</td>
         <td>Описание</td>
         <td>Автор</td>
+        <td>Исполнитель</td>
         <td>Приоритет</td>
         <td>Статус</td>
         <td>Дата создания</td>
@@ -51,7 +52,7 @@
                 <td th:text="${issue.name}"></td>
                 <td th:text="${issue.description}"></td>
                 <td th:text="${issue.creator.getUsername()}"></td>
-                <!--<td th:text="${return issue.executor != null ? issue.executor.getUsername()}"></td>!!!!ВЕРНУТЬ ПРИ ОБНОВЛЕНИИ БД-->
+                <td th:text="${issue.executor.getUsername()}"></td>
                 <td th:text="${issue.issuePriority}"></td>
                 <td th:text="${issue.issueStatus}"></td>
                 <td th:text="${issue.date}"></td>

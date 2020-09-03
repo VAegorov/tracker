@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -35,7 +36,7 @@ public class IssueController {
 
 
     @PostMapping("/issue")
-    String issuePage(@AuthenticationPrincipal User user, @RequestParam Long issueId, Model model) {
+    public String issuePage(@AuthenticationPrincipal User user, @RequestParam Long issueId, Model model) {
         Issue issue = issueRepo.findById(issueId).get();
         model.addAttribute(issue);
 
@@ -68,7 +69,7 @@ public class IssueController {
     }
 
     @PostMapping("/editissue")
-    ModelAndView issuePage(@RequestParam Long issueId, @RequestParam String issueName,
+    public ModelAndView issuePage(@RequestParam Long issueId, @RequestParam String issueName,
                            @RequestParam String issueDescription, @RequestParam IssuePriority issuePriority,
                            @RequestParam IssueStatus issueStatus, @RequestParam Long executorId, HttpServletRequest request) {
         if (!issueName.isEmpty() || !issueDescription.isEmpty()) {
@@ -86,5 +87,22 @@ public class IssueController {
         request.setAttribute(View.RESPONSE_STATUS_ATTRIBUTE, HttpStatus.TEMPORARY_REDIRECT);
 
         return new ModelAndView("redirect:/issue");
+    }
+
+    @PostMapping("/deleteissue")
+    public ModelAndView deleteissue(@AuthenticationPrincipal User user, @RequestParam Long issueId,
+                                    @RequestParam Long projectId, HttpServletRequest request) {
+
+        Project project = projectRepo.findById(projectId).get();
+        Issue issue = issueRepo.findById(issueId).get();
+        issue.getExecutor().getIssueExecutor().remove(issue);
+        issue.getCreator().getIssueCreator().remove(issue);
+        project.getIssues().remove(issue);
+        issueRepo.deleteById(issueId);
+        projectRepo.save(project);
+
+        request.setAttribute(View.RESPONSE_STATUS_ATTRIBUTE, HttpStatus.TEMPORARY_REDIRECT);
+
+        return new ModelAndView("redirect:/workspace");
     }
 }

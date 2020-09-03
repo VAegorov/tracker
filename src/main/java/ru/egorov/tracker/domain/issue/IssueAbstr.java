@@ -8,6 +8,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 @Inheritance( strategy = InheritanceType.TABLE_PER_CLASS )
@@ -112,5 +113,18 @@ public abstract class IssueAbstr implements Serializable {
 
     public void setExecutor(User executor) {
         this.executor = executor;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof IssueAbstr)) return false;
+        IssueAbstr that = (IssueAbstr) o;
+        return getId().equals(that.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }

@@ -145,6 +145,22 @@ public class User implements UserDetails, Serializable {
         this.projectsAdmin = projectsAdmin;
     }
 
+    public Set<Issue> getIssueCreator() {
+        return issueCreator;
+    }
+
+    public void setIssueCreator(Set<Issue> issueCreator) {
+        this.issueCreator = issueCreator;
+    }
+
+    public Set<Issue> getIssueExecutor() {
+        return issueExecutor;
+    }
+
+    public void setIssueExecutor(Set<Issue> issueExecutor) {
+        this.issueExecutor = issueExecutor;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

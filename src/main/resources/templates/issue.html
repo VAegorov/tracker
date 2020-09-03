@@ -20,7 +20,7 @@
         </form>
     </div>
     <h2>Редактирование задачи</h2>
-    <form th:action="@{/editissue}" method="post">
+    <form th:action="@{/editissue}" th:method="post">
         <input type="text" name="issueName" th:value="${issue.name}">
         <input type="text" name="issueDescription" th:value="${issue.description}">
         <select name="issuePriority" size="1">
@@ -36,10 +36,17 @@
                     th:selected="${issueStatus==issue.issueStatus}"></option>
         </select>
         <input th:if="${resolveEditIssue}" th:hidden="issueId" th:value="${issue.id}" name="issueId">
+        <input th:if="${resolveEditIssue}" th:hidden="projectId" th:value="${project.id}" name="projectId">
         <button th:if="${resolveEditIssue}">Сохранить</button>
         <span th:if="${resolveNoEditIssue}">Вы не можете редактировать эту задачу!</span>
+        <button th:if="${resolveEditIssue}" th:formaction="@{/deleteissue}">Удалить</button>
 
-    </form>
+  </form>
+
+     <!--<form th:action="@{/deleteissue}" method="post" th:if="${resolveEditIssue}">
+        <input th:hidden="issueId" th:value="${issue.id}" name="issueId">
+
+    </form>-->
     <h2>Создать подзадачу</h2>
     <form th:action="@{/addsubissue}" method="post">
         <input type="text" name="issueName" placeholder="Добавьте подзадачу">
