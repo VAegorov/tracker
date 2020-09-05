@@ -38,21 +38,21 @@ public class IssueController {
     @PostMapping("/issue")
     public String issuePage(@AuthenticationPrincipal User user, @RequestParam Long issueId, Model model) {
         Issue issue = issueRepo.findById(issueId).get();
-        model.addAttribute(issue);
+        model.addAttribute("issue", issue);
 
         model.addAttribute("user", user);
 
         Project project = issue.getProject();
-        model.addAttribute(project);
+        model.addAttribute("project", project);
 
-        HashSet<User> executors = project.allUsers();
-        model.addAttribute("executors", executors);
+        //HashSet<User> executors = project.allUsers();
+        model.addAttribute("executors", project.allUsers());
 
-        IssuePriority[] issuePriorities = IssuePriority.values();
-        model.addAttribute("issuePriorities", issuePriorities);
+        //IssuePriority[] issuePriorities = IssuePriority.values();
+        model.addAttribute("issuePriorities", IssuePriority.values());
 
-        IssueStatus[] issueStatuses = IssueStatus.values();
-        model.addAttribute("issueStatuses", issueStatuses);
+        //IssueStatus[] issueStatuses = IssueStatus.values();
+        model.addAttribute("issueStatuses", IssueStatus.values());
 
         if (user.equals(issue.getCreator()) || user.equals(issue.getExecutor()) || user.equals(project.getOwner()) || user.equals(project.getAdmin())) {
             resolveEditIssue = true;

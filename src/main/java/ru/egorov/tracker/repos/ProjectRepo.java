@@ -13,8 +13,10 @@ public interface ProjectRepo extends JpaRepository<Project, Long> {
 
     Iterable<Project>findByOwnerId(Long id);
 
-    @Query(value = "SELECT * FROM project JOIN  project_user ON project.id=project_user.project_id where project_user.usr_id=?", nativeQuery = true)
-    Iterable<Project> findAllWhereByIdUser(Long id);//проекты пользователя по его Id
+    @Query(value = "SELECT * FROM project u JOIN project_user ON" +
+            " u.id=project_user.project_id where project_user.usr_id=?", nativeQuery = true)
+    //@Query("SELECT u FROM Project u JOIN u.users ON u.id=u.users. where User.id=?1")
+    Iterable<Project> findAllWhereByIdUser(Long id);//проекты пользователя где он участник по его Id
 
 
 }

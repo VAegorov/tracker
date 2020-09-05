@@ -47,11 +47,11 @@ public class WorkspaceController {
         Iterable<User> users = userRepo.findNewUser(projectId);
         model.addAttribute("users", users);
 
-        IssuePriority[] issuePriorities = IssuePriority.values();
-        model.addAttribute("issuePriorities", issuePriorities);
+        //IssuePriority[] issuePriorities = IssuePriority.values();
+        model.addAttribute("issuePriorities", IssuePriority.values());
 
-        IssueStatus[] issueStatuses = IssueStatus.values();
-        model.addAttribute("issueStatuses", issueStatuses);
+        //IssueStatus[] issueStatuses = IssueStatus.values();
+        model.addAttribute("issueStatuses", IssueStatus.values());
 
         isEditor = false;
         if (project.isOwner(user) || project.isAdmin(user)) {
