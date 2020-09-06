@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-
+//test
 @Entity
 @Table(name = "issue")
 public class Issue extends IssueAbstr {
