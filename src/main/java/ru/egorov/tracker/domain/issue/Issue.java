@@ -9,7 +9,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "issue")
-public class Issue extends IssueAbstr {
+public class Issue extends IssueAbstr{
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "project", referencedColumnName = "id")
     private Project project;

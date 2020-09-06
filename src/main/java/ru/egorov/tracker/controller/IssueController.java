@@ -13,12 +13,14 @@ import ru.egorov.tracker.domain.User;
 import ru.egorov.tracker.domain.issue.Issue;
 import ru.egorov.tracker.domain.issue.IssuePriority;
 import ru.egorov.tracker.domain.issue.IssueStatus;
+import ru.egorov.tracker.domain.issue.SubIssue;
 import ru.egorov.tracker.repos.IssueRepo;
 import ru.egorov.tracker.repos.ProjectRepo;
 import ru.egorov.tracker.repos.UserRepo;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashSet;
+import java.util.Set;
 
 @Controller
 public class IssueController {
@@ -51,6 +53,12 @@ public class IssueController {
 
         //IssueStatus[] issueStatuses = IssueStatus.values();
         model.addAttribute("issueStatuses", IssueStatus.values());
+
+        if (!issue.getSubIssues().isEmpty()) {
+            Set<SubIssue> subIssues = issue.getSubIssues();
+            model.addAttribute("subissues", subIssues);
+        }
+
 
         if (user.equals(issue.getCreator()) || user.equals(issue.getExecutor()) || user.equals(project.getOwner()) || user.equals(project.getAdmin())) {
             resolveEditIssue = true;
@@ -102,6 +110,21 @@ public class IssueController {
         return new ModelAndView("redirect:/workspace");
     }
 
-    /*@PostMapping("/addsubissue")
-    public */
+    @PostMapping("/addsubissue")
+    public String addsubissue(@AuthenticationPrincipal User user, @RequestParam Long issueId,
+                              @RequestParam String issueName, @RequestParam String issueDescription,
+                              @RequestParam Long executorId, @RequestParam IssuePriority issuePriority,
+                              @RequestParam IssueStatus issueStatus) {
+
+        User executor = userRepo.findById(executorId).get();
+        Issue issue = issueRepo.findById(issueId).get();
+        SubIssue subIssue = new SubIssue(issueName, issueDescription, user, executor,
+                issuePriority, issueStatus, issue);
+        //Project project = issue.getProject();
+        //project
+        issue.getSubIssues().add(subIssue);
+        issueRepo.save(issue);
+
+        return "redirect:/issue?issueId=" + issueId;
+    }
 }

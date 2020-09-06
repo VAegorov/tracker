@@ -58,6 +58,24 @@
         <button th:if="${resolveEditIssue}">Добавить</button>
         <span th:if="${resolveNoEditIssue}">Вы не можете создавать подзадачи!</span>
     </form>
-
+    <h2>Подзадачи</h2>
+    <table>
+        <tr th:each="subissue : ${subissues}">
+            <td th:text="${subissue.id}"></td>
+            <td th:text="${subissue.name}"></td>
+            <td th:text="${subissue.description}"></td>
+            <td th:text="${subissue.creator.getUsername()}"></td>
+            <td th:text="${subissue.executor.getUsername()}"></td>
+            <td th:text="${subissue.issuePriority}"></td>
+            <td th:text="${subissue.issueStatus}"></td>
+            <td th:text="${subissue.date}"></td>
+            <td>
+                <form th:action="@{/issue}" method="get">
+                    <button>Редактировать</button>
+                    <input th:hidden="subissueId" th:value="${subissue.id}" name="issueId">
+                </form>
+            </td>
+        </tr>
+    </table>
 </body>
 </html>
