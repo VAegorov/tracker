@@ -5,9 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.View;
 import ru.egorov.tracker.domain.Project;
@@ -35,7 +33,7 @@ public class IssueController {
     private boolean resolveNoEditIssue = true;
 
 
-    @PostMapping("/issue")
+    @GetMapping("/issue")
     public String issuePage(@AuthenticationPrincipal User user, @RequestParam Long issueId, Model model) {
         Issue issue = issueRepo.findById(issueId).get();
         model.addAttribute("issue", issue);
@@ -69,9 +67,9 @@ public class IssueController {
     }
 
     @PostMapping("/editissue")
-    public ModelAndView issuePage(@RequestParam Long issueId, @RequestParam String issueName,
+    public String issuePage(@RequestParam Long issueId, @RequestParam String issueName,
                            @RequestParam String issueDescription, @RequestParam IssuePriority issuePriority,
-                           @RequestParam IssueStatus issueStatus, @RequestParam Long executorId, HttpServletRequest request) {
+                           @RequestParam IssueStatus issueStatus, @RequestParam Long executorId) {
         if (!issueName.isEmpty() || !issueDescription.isEmpty()) {
             Issue issue = issueRepo.findById(issueId).get();
             User executor = userRepo.findById(executorId).get();
@@ -84,9 +82,7 @@ public class IssueController {
             issueRepo.save(issue);
         }
 
-        request.setAttribute(View.RESPONSE_STATUS_ATTRIBUTE, HttpStatus.TEMPORARY_REDIRECT);
-
-        return new ModelAndView("redirect:/issue");
+        return "redirect:/issue?issueId=" + issueId;
     }
 
     @PostMapping("/deleteissue")
@@ -105,4 +101,7 @@ public class IssueController {
 
         return new ModelAndView("redirect:/workspace");
     }
+
+    /*@PostMapping("/addsubissue")
+    public */
 }

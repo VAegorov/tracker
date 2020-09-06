@@ -1,17 +1,35 @@
 <a href="details.html" th:href="@{/order/details(orderId=${o.id})}">view</a>
-
+____________________________________
 <td th:text="${#calendars.format(o.date,'dd/MMM/yyyy')}">13 jan 2011</td>
-
+___________________
     <div th:object="${session.user}">
        <p>Name: <span th:text="*{firstName}">Sebastian</span>.</p>
        <p>Surname: <span th:text="*{lastName}">Pepper</span>.</p>
        <p>Nationality: <span th:text="*{nationality}">Saturn</span>.</p>
        <p>Age: <span th:text="*{age}?: '(no age specified)'">27</span>.</p>
     </div>
-
+____________________________
  @ManyToMany - соединяется через отдельную таблицу
     @JoinTable(name = "project_user",
             joinColumns = @JoinColumn(name = "project_id"),
             inverseJoinColumns = @JoinColumn(name = "usr_id")
 
         return author != null ? author.getUsername() : "<none>";
+   ____________________
+ @PostMapping("/addissue")
+     public ModelAndView addIssue(@AuthenticationPrincipal User user, @RequestParam Long projectId,
+                                  @RequestParam String issueName, @RequestParam String issueDescription,
+                                  @RequestParam IssuePriority issuePriority, @RequestParam IssueStatus issueStatus,
+                                  @RequestParam User executorId, HttpServletRequest request) {
+         Project project = projectRepo.findById(projectId).get();
+
+         if (!issueName.isEmpty() && !issueDescription.isEmpty()) {
+             Issue issue = new Issue(issueName, issueDescription, user, executorId, project, issuePriority, issueStatus);
+             project.getIssues().add(issue);
+             projectRepo.save(project);
+         }
+
+         request.setAttribute(View.RESPONSE_STATUS_ATTRIBUTE, HttpStatus.TEMPORARY_REDIRECT);
+
+         return new ModelAndView("redirect:/workspace");
+ _________________

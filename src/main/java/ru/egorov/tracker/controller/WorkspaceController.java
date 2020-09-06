@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -31,7 +32,7 @@ public class WorkspaceController {
     @Autowired
     private IssueRepo issueRepo;
 
-    @PostMapping("/workspace")
+    @GetMapping("/workspace")
     public String inWorkspace(@AuthenticationPrincipal User user, @RequestParam Long projectId, Model model) {
         Project project = projectRepo.findById(projectId).get();
         model.addAttribute("project", project);
@@ -63,10 +64,10 @@ public class WorkspaceController {
     }
 
     @PostMapping("/addissue")
-    public ModelAndView addIssue(@AuthenticationPrincipal User user, @RequestParam Long projectId,
+    public String addIssue(@AuthenticationPrincipal User user, @RequestParam Long projectId,
                                  @RequestParam String issueName, @RequestParam String issueDescription,
                                  @RequestParam IssuePriority issuePriority, @RequestParam IssueStatus issueStatus,
-                                 @RequestParam User executorId, HttpServletRequest request) {
+                                 @RequestParam User executorId) {
         Project project = projectRepo.findById(projectId).get();
 
         if (!issueName.isEmpty() && !issueDescription.isEmpty()) {
@@ -75,15 +76,13 @@ public class WorkspaceController {
             projectRepo.save(project);
         }
 
-        request.setAttribute(View.RESPONSE_STATUS_ATTRIBUTE, HttpStatus.TEMPORARY_REDIRECT);
-
-        return new ModelAndView("redirect:/workspace");
+        return "redirect:/workspace?projectId=" + projectId;
     }
 
     @PostMapping("/addProjectUser")
-    public ModelAndView addProjectUser(@AuthenticationPrincipal User user,
+    public String addProjectUser(@AuthenticationPrincipal User user,
                                  @RequestParam Long userid,
-                                 @RequestParam Long projectId, HttpServletRequest request) {
+                                 @RequestParam Long projectId) {
         User newUser = userRepo.findById(userid).get();
         Project project = projectRepo.findById(projectId).get();
         project.getUsers().add(newUser);
@@ -91,8 +90,6 @@ public class WorkspaceController {
         newUser.getProjectsUser().add(project);
         userRepo.save(newUser);
 
-        request.setAttribute(View.RESPONSE_STATUS_ATTRIBUTE, HttpStatus.TEMPORARY_REDIRECT);
-
-        return new ModelAndView("redirect:/workspace");
+        return "redirect:/workspace?projectId=" + projectId;
     }
 }

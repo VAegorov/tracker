@@ -45,9 +45,7 @@
         <td>Дата создания</td>
         <td></td>
     </tr>
-
         <tr th:each="issue : ${issues}">
-            <form th:action="@{/issue}" method="post">
                 <td th:text="${issue.id}"></td>
                 <td th:text="${issue.name}"></td>
                 <td th:text="${issue.description}"></td>
@@ -56,11 +54,13 @@
                 <td th:text="${issue.issuePriority}"></td>
                 <td th:text="${issue.issueStatus}"></td>
                 <td th:text="${issue.date}"></td>
-                <td ><button>Редактировать</button></td>
-                <input th:hidden="issueId" th:value="${issue.id}" name="issueId">
-            </form>
+                <td>
+                    <form th:action="@{/issue}" method="get">
+                        <button>Редактировать</button>
+                        <input th:hidden="issueId" th:value="${issue.id}" name="issueId">
+                    </form>
+                </td>
         </tr>
-
 </table>
 <div th:if="${isEditor}">
     <h2>Добавить участника проекта: </h2>
