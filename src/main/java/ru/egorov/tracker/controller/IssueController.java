@@ -170,7 +170,7 @@ public class IssueController {
     }
 
     @PostMapping("editsubissue")
-    public String editsubissue(@RequestParam Long issueId,
+    public String editsubissue(@AuthenticationPrincipal User user, @RequestParam Long issueId,
                                @RequestParam String issueName, @RequestParam String issueDescription,
                                @RequestParam IssuePriority issuePriority, @RequestParam IssueStatus issueStatus) {
         SubIssue subIssue = subIssueRepo.findById(issueId).get();
@@ -181,5 +181,17 @@ public class IssueController {
         subIssueRepo.save(subIssue);
 
         return "redirect:/subissuepage?subissueId=" + issueId;
+    }
+
+    @PostMapping("/deletesubissue")
+    public String deletesubissue(@AuthenticationPrincipal User user,@RequestParam Long issueId) {
+        SubIssue subIssue = subIssueRepo.findById(issueId).get();
+        Issue issue = subIssue.getIssue();
+        Long issueparentid = issue.getId();
+        subIssue.getIssue().getSubIssues().remove(subIssue);
+        issueRepo.save(issue);
+        subIssueRepo.delete(subIssue);
+
+        return "redirect:/issue?issueId=" + issueparentid;
     }
 }
