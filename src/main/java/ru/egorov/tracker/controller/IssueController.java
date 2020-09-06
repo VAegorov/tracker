@@ -16,10 +16,12 @@ import ru.egorov.tracker.domain.issue.IssueStatus;
 import ru.egorov.tracker.domain.issue.SubIssue;
 import ru.egorov.tracker.repos.IssueRepo;
 import ru.egorov.tracker.repos.ProjectRepo;
+import ru.egorov.tracker.repos.SubIssueRepo;
 import ru.egorov.tracker.repos.UserRepo;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Controller
@@ -30,9 +32,8 @@ public class IssueController {
     private IssueRepo issueRepo;
     @Autowired
     private UserRepo userRepo;
-
-    private boolean resolveEditIssue = false;
-    private boolean resolveNoEditIssue = true;
+    @Autowired
+    private SubIssueRepo subIssueRepo;
 
 
     @GetMapping("/issue")
@@ -59,13 +60,17 @@ public class IssueController {
             model.addAttribute("subissues", subIssues);
         }
 
-
-        if (user.equals(issue.getCreator()) || user.equals(issue.getExecutor()) || user.equals(project.getOwner()) || user.equals(project.getAdmin())) {
+        boolean resolveEditIssue;
+        boolean resolveNoEditIssue;
+        if (user.equals(issue.getCreator()) || user.equals(issue.getExecutor()) ||
+                user.equals(project.getOwner()) || user.equals(project.getAdmin())) {
             resolveEditIssue = true;
-            model.addAttribute("resolveEditIssue", resolveEditIssue);
             resolveNoEditIssue = false;
+            model.addAttribute("resolveEditIssue", resolveEditIssue);
             model.addAttribute("resolveNoEditIssue", resolveNoEditIssue);
         } else {
+            resolveEditIssue = false;
+            resolveNoEditIssue = true;
             model.addAttribute("resolveEditIssue", resolveEditIssue);
             model.addAttribute("resolveNoEditIssue", resolveNoEditIssue);
         }
@@ -86,6 +91,12 @@ public class IssueController {
             issue.setName(issueName);
             issue.setDescription(issueDescription);
             issue.setIssuePriority(issuePriority);
+
+            if (!issue.getSubIssues().isEmpty()) {
+                for (SubIssue subissue : issue.getSubIssues()) {
+                    subissue.setExecutor(executor);
+                }
+            }
 
             issueRepo.save(issue);
         }
@@ -113,11 +124,12 @@ public class IssueController {
     @PostMapping("/addsubissue")
     public String addsubissue(@AuthenticationPrincipal User user, @RequestParam Long issueId,
                               @RequestParam String issueName, @RequestParam String issueDescription,
-                              @RequestParam Long executorId, @RequestParam IssuePriority issuePriority,
+                              @RequestParam IssuePriority issuePriority,
                               @RequestParam IssueStatus issueStatus) {
 
-        User executor = userRepo.findById(executorId).get();
+        //User executor = userRepo.findById(executorId).get();
         Issue issue = issueRepo.findById(issueId).get();
+        User executor = issue.getExecutor();
         SubIssue subIssue = new SubIssue(issueName, issueDescription, user, executor,
                 issuePriority, issueStatus, issue);
         //Project project = issue.getProject();
@@ -126,5 +138,48 @@ public class IssueController {
         issueRepo.save(issue);
 
         return "redirect:/issue?issueId=" + issueId;
+    }
+
+    @GetMapping("/subissuepage")
+    public String subissuePage(@AuthenticationPrincipal User user, @RequestParam Long subissueId, Model model) {
+        SubIssue subIssue = subIssueRepo.findById(subissueId).get();
+        Issue issue = subIssue.getIssue();
+        Project project = issue.getProject();
+        model.addAttribute(issue);
+        model.addAttribute(subIssue);
+        model.addAttribute(project);
+        model.addAttribute("issuePriorities", IssuePriority.values());
+        model.addAttribute("issueStatuses", IssueStatus.values());
+
+        boolean resolveEditIssue;
+        boolean resolveNoEditIssue;
+        if (user.equals(issue.getCreator()) || user.equals(issue.getExecutor()) ||
+                user.equals(project.getOwner()) || user.equals(project.getAdmin())) {
+            resolveEditIssue = true;
+            resolveNoEditIssue = false;
+            model.addAttribute("resolveEditIssue", resolveEditIssue);
+            model.addAttribute("resolveNoEditIssue", resolveNoEditIssue);
+        } else {
+            resolveEditIssue = false;
+            resolveNoEditIssue = true;
+            model.addAttribute("resolveEditIssue", resolveEditIssue);
+            model.addAttribute("resolveNoEditIssue", resolveNoEditIssue);
+        }
+
+        return "/subissue";
+    }
+
+    @PostMapping("editsubissue")
+    public String editsubissue(@RequestParam Long issueId,
+                               @RequestParam String issueName, @RequestParam String issueDescription,
+                               @RequestParam IssuePriority issuePriority, @RequestParam IssueStatus issueStatus) {
+        SubIssue subIssue = subIssueRepo.findById(issueId).get();
+        subIssue.setName(issueName);
+        subIssue.setDescription(issueDescription);
+        subIssue.setIssuePriority(issuePriority);
+        subIssue.setIssueStatus(issueStatus);
+        subIssueRepo.save(subIssue);
+
+        return "redirect:/subissuepage?subissueId=" + issueId;
     }
 }

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Tracker</title>
+</head>
+<body>
+    <a th:href="@{/home}">Все проекты</a>
+    <div>
+        <form th:action="@{/workspace}" th:method="get">
+            <button>Вернуться на проект</button>
+            <input th:hidden="projectId" th:value="${project.id}" name="projectId">
+        </form>
+    </div>
+    <div>
+        <form th:action="@{/issue}" th:method="get">
+            <button>Вернуться к задаче</button>
+            <input th:hidden="issueId" th:value="${issue.id}" name="issueId">
+        </form>
+    </div>
+    <div>
+        <form th:action="@{/logout}" th:method="post">
+            <input type="submit" value="Sign Out"/>
+        </form>
+    </div>
+    <h2>Редактирование подзадачи</h2>
+    <form th:action="@{/editsubissue}" th:method="post">
+        <input type="text" name="issueName" th:value="${subIssue.name}">
+        <input type="text" name="issueDescription" th:value="${subIssue.description}">
+        <!--<select name="executorId" size="1">
+            <option th:each="executor : ${executors}" th:utext="${executor.username}" th:value="${executor.id}"
+                    th:selected="${executor==issue.executor}"></option>
+        </select>-->
+        <select name="issuePriority" size="1">
+            <option th:each="issuePriority : ${issuePriorities}" th:utext="${issuePriority}" th:value="${issuePriority}"
+                    th:selected="${issuePriority==subIssue.issuePriority}"></option>
+        </select>
+        <select name="issueStatus" size="1">
+            <option th:each="issueStatus : ${issueStatuses}" th:utext="${issueStatus}" th:value="${issueStatus}"
+                    th:selected="${issueStatus==subIssue.issueStatus}"></option>
+        </select>
+        <input th:if="${resolveEditIssue}" th:hidden="issueId" th:value="${subIssue.id}" name="issueId">
+        <input th:if="${resolveEditIssue}" th:hidden="projectId" th:value="${project.id}" name="projectId">
+        <button th:if="${resolveEditIssue}">Сохранить</button>
+        <span th:if="${resolveNoEditIssue}">Вы не можете редактировать эту подзадачу!</span>
+        <button th:if="${resolveEditIssue}" th:formaction="@{/deletesubissue}">Удалить</button>
+  </form>
+
+</body>
+</html>

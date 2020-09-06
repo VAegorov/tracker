@@ -45,9 +45,9 @@
     <form th:action="@{/addsubissue}" method="post">
         <input type="text" name="issueName" placeholder="Добавьте подзадачу">
         <input type="text" name="issueDescription" placeholder="Добавьте описание">
-        <select name="executorId" size="1">
+        <!--<select name="executorId" size="1">
             <option th:each="executor : ${executors}" th:utext="${executor.username}" th:value="${executor.id}" th:selected="${executor==user}"></option>
-        </select>
+        </select>-->
         <select name="issuePriority" size="1">
             <option th:each="priority : ${issuePriorities}" th:utext="${priority}" th:value="${priority}"></option>
         </select>
@@ -58,8 +58,19 @@
         <button th:if="${resolveEditIssue}">Добавить</button>
         <span th:if="${resolveNoEditIssue}">Вы не можете создавать подзадачи!</span>
     </form>
-    <h2>Подзадачи</h2>
     <table>
+        <caption>Подзадачи</caption>
+        <tr>
+            <td>ID</td>
+            <td>Название</td>
+            <td>Описание</td>
+            <td>Автор</td>
+            <td>Исполнитель</td>
+            <td>Приоритет</td>
+            <td>Статус</td>
+            <td>Дата создания</td>
+            <td></td>
+        </tr>
         <tr th:each="subissue : ${subissues}">
             <td th:text="${subissue.id}"></td>
             <td th:text="${subissue.name}"></td>
@@ -70,9 +81,9 @@
             <td th:text="${subissue.issueStatus}"></td>
             <td th:text="${subissue.date}"></td>
             <td>
-                <form th:action="@{/issue}" method="get">
+                <form th:action="@{/subissuepage}" method="get">
                     <button>Редактировать</button>
-                    <input th:hidden="subissueId" th:value="${subissue.id}" name="issueId">
+                    <input th:hidden="subissueId" th:value="${subissue.id}" name="subissueId">
                 </form>
             </td>
         </tr>
