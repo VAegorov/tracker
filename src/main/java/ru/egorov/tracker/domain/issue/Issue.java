@@ -4,7 +4,6 @@ import ru.egorov.tracker.domain.Project;
 import ru.egorov.tracker.domain.User;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
