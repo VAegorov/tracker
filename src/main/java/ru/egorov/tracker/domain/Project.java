@@ -1,7 +1,6 @@
 package ru.egorov.tracker.domain;
 
-import ru.egorov.tracker.domain.issue.Issue;
-import ru.egorov.tracker.domain.storage.BackLog;
+import ru.egorov.tracker.domain.storage.Back;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -37,7 +36,7 @@ public class Project implements Serializable {
     private Set<Issue> issues = new HashSet<>();*/
     @OneToOne(cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
-    private BackLog backLog = new BackLog();
+    private Back back = new Back();
 
     public Project() {
     }
@@ -118,12 +117,12 @@ public class Project implements Serializable {
         return users;
     }
 
-    public BackLog getBackLog() {
-        return backLog;
+    public Back getBackLog() {
+        return back;
     }
 
-    public void setBackLog(BackLog backLog) {
-        this.backLog = backLog;
+    public void setBackLog(Back back) {
+        this.back = back;
     }
 
     @Override

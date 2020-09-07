@@ -9,9 +9,9 @@ import javax.persistence.ManyToOne;
 
 @Entity
 public class SubIssue extends IssueAbstr{
-    @ManyToOne(fetch = FetchType.EAGER)
+   /* @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "issue", referencedColumnName = "id")
-    Issue issue;//parent
+    Issue issue;//parent*/
 
     public SubIssue() {
     }
@@ -19,14 +19,14 @@ public class SubIssue extends IssueAbstr{
     public SubIssue(String name, String description, User creator, User executor,
                     IssuePriority issuePriority, IssueStatus issueStatus, Issue issue) {
         super(name, creator, executor, issuePriority, issueStatus, description);
-        this.issue = issue;
+        //this.issue = issue;
     }
 
-    public Issue getIssue() {
+    /*public Issue getIssue() {
         return issue;
-    }
+    }*/
 
-    public void setIssue(Issue issueParent) {
+    /*public void setIssue(Issue issueParent) {
         this.issue = issueParent;
-    }
+    }*/
 }

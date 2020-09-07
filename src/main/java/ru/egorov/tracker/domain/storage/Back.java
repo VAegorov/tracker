@@ -1,9 +1,6 @@
 package ru.egorov.tracker.domain.storage;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import ru.egorov.tracker.domain.Project;
 import ru.egorov.tracker.domain.issue.Issue;
-import ru.egorov.tracker.repos.IssueRepo;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -11,32 +8,38 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "back_log")
-public class BackLog implements ImplStorage, Serializable {
+//@Table(name = "backlog")
+public class Back implements ImplStorage, Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     //private Project project;
     //@OneToMany(mappedBy = "back_log", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinTable(
+
+    /*@JoinTable(
             name="netto",
             joinColumns = @JoinColumn( name="back_log_id"),
             inverseJoinColumns = @JoinColumn( name="issue_id")
-    )
-
+    )*/
     //@ElementCollection(targetClass = Issue.class)
-    //@JoinColumn(name = "back_log"/*, referencedColumnName = "id"*/)
-    private Set<Issue> store = new HashSet<>();
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "back_id", referencedColumnName = "id")
+    private Set<Issue> issues = new HashSet<>();
 
     /*@Autowired
     private IssueRepo issueRepo;*/
 
+    public Back() {
+    }
+
+    public Back(Set<Issue> issues) {
+        this.issues = issues;
+    }
 
     @Override
     public void addIssue(Issue issue) {
-        store.add(issue);
+        issues.add(issue);
     }
 
     @Override
@@ -58,11 +61,11 @@ public class BackLog implements ImplStorage, Serializable {
         return id;
     }
 
-    public Set<Issue> getStore() {
-        return store;
+    public Set<Issue> getIssues() {
+        return issues;
     }
 
-    public void setStore(Set<Issue> store) {
-        this.store = store;
+    public void setIssues(Set<Issue> store) {
+        this.issues = store;
     }
 }

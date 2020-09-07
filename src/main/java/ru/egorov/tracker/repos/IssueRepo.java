@@ -11,7 +11,7 @@ public interface IssueRepo extends JpaRepository<Issue, Long> {
     @Query(value = "SELECT u FROM issue u where u.creator=?", nativeQuery = true)
     Iterable<Issue> findAllByIdCreator(Long id);
 
-    Iterable<Issue> findAllByProjectId(Long id);
+    /*Iterable<Issue> findAllByProjectId(Long id);*/
 
     Optional<Issue> findById(Long Id);
 

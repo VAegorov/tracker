@@ -1,3 +1,4 @@
+/*
 package ru.egorov.tracker.repos;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -8,3 +9,4 @@ import ru.egorov.tracker.domain.issue.SubIssue;
 public interface SubIssueRepo extends JpaRepository<SubIssue, Long> {
 
 }
+*/
