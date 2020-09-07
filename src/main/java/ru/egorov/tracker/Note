@@ -13,7 +13,7 @@ ____________________________
     @JoinTable(name = "project_user",
             joinColumns = @JoinColumn(name = "project_id"),
             inverseJoinColumns = @JoinColumn(name = "usr_id")
-
+-------------------
         return author != null ? author.getUsername() : "<none>";
    ____________________
  @PostMapping("/addissue")

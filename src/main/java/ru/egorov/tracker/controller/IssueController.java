@@ -1,3 +1,4 @@
+/*
 package ru.egorov.tracker.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -194,4 +195,4 @@ public class IssueController {
 
         return "redirect:/issue?issueId=" + issueparentid;
     }
-}
+}*/

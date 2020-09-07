@@ -2,6 +2,8 @@ package ru.egorov.tracker.domain.issue;
 
 import ru.egorov.tracker.domain.Project;
 import ru.egorov.tracker.domain.User;
+import ru.egorov.tracker.domain.storage.BackLog;
+
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -10,28 +12,28 @@ import java.util.Set;
 @Entity
 @Table(name = "issue")
 public class Issue extends IssueAbstr{
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "project", referencedColumnName = "id")
-    private Project project;
+    /*@ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "back_log", referencedColumnName = "id")
+    private BackLog backLog;*/
     @OneToMany(mappedBy = "issue", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     public Set<SubIssue> subIssues = new HashSet<>();
 
     public Issue() {
     }
 
-    public Issue(String name, String description, User creator, User executor, Project project,
+    public Issue(String name, String description, User creator, User executor, /*Project project,*/
                  IssuePriority issuePriority, IssueStatus issueStatus) {
         super(name, creator, executor, issuePriority, issueStatus, description);
-        this.project = project;
+        //this.project = project;
     }
 
-    public Project getProject() {
+   /* public Project getProject() {
         return project;
     }
 
     public void setProject(Project project) {
         this.project = project;
-    }
+    }*/
 
     public Set<SubIssue> getSubIssues() {
         return subIssues;
@@ -40,4 +42,13 @@ public class Issue extends IssueAbstr{
     public void setSubIssues(Set<SubIssue> subIssues) {
         this.subIssues = subIssues;
     }
+
+    /*public BackLog getBackLog() {
+        return backLog;
+    }
+
+    public void setBackLog(BackLog backLog) {
+        this.backLog = backLog;
+    }*/
+
 }

@@ -1,6 +1,7 @@
 package ru.egorov.tracker.domain;
 
 import ru.egorov.tracker.domain.issue.Issue;
+import ru.egorov.tracker.domain.storage.BackLog;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -32,8 +33,11 @@ public class Project implements Serializable {
     )
     private Set<User> users = new HashSet<>();
 
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private Set<Issue> issues = new HashSet<>();
+    /*@OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private Set<Issue> issues = new HashSet<>();*/
+    @OneToOne(cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+    private BackLog backLog = new BackLog();
 
     public Project() {
     }
@@ -89,13 +93,13 @@ public class Project implements Serializable {
         this.admin = admin;
     }
 
-    public Set<Issue> getIssues() {
+    /*public Set<Issue> getIssues() {
         return issues;
     }
 
     public void setIssues(Set<Issue> issues) {
         this.issues = issues;
-    }
+    }*/
 
     public boolean isOwner(User user) {
         return this.getOwner().equals(user);
@@ -112,6 +116,14 @@ public class Project implements Serializable {
         users.addAll(this.users);
 
         return users;
+    }
+
+    public BackLog getBackLog() {
+        return backLog;
+    }
+
+    public void setBackLog(BackLog backLog) {
+        this.backLog = backLog;
     }
 
     @Override

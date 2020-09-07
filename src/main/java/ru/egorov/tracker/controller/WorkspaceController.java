@@ -71,8 +71,9 @@ public class WorkspaceController {
         Project project = projectRepo.findById(projectId).get();
 
         if (!issueName.isEmpty() && !issueDescription.isEmpty()) {
-            Issue issue = new Issue(issueName, issueDescription, user, executorId, project, issuePriority, issueStatus);
-            project.getIssues().add(issue);
+            Issue issue = new Issue(issueName, issueDescription, user, executorId, /*project, */issuePriority, issueStatus);
+            project.getBackLog().addIssue(issue);
+            //надо ли сохранять BackLog?
             projectRepo.save(project);
         }
 
