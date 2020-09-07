@@ -14,7 +14,9 @@ public class Issue extends IssueAbstr{
     @JoinColumn(name = "project", referencedColumnName = "id")
     private Project project;
     @OneToMany(mappedBy = "issue", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    public Set<SubIssue> subIssues = new HashSet<>();
+    private Set<SubIssue> subIssues = new HashSet<>();
+    private boolean backLog = true;
+
 
     public Issue() {
     }
@@ -39,5 +41,13 @@ public class Issue extends IssueAbstr{
 
     public void setSubIssues(Set<SubIssue> subIssues) {
         this.subIssues = subIssues;
+    }
+
+    public boolean isBackLog() {
+        return backLog;
+    }
+
+    public void setBackLog(boolean backLog) {
+        this.backLog = backLog;
     }
 }
