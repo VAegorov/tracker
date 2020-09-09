@@ -112,7 +112,7 @@ public class WorkspaceController {
             return "redirect:/workspace?projectId=" + projectId;
         }
 
-        return "/home";//если нет проектаid, то переход на общую страницу с проектами
+        return "redirect:/home";//если нет проектаid, то переход на общую страницу с проектами
     }
 
     @GetMapping("/fromsprinttobacklog")
@@ -128,7 +128,7 @@ public class WorkspaceController {
             return "redirect:/workspace?projectId=" + projectId;
         }
 
-        return "/home";//если нет проектаid, то переход на общую страницу с проектами
+        return "redirect:/home";//если нет проектаid, то переход на общую страницу с проектами
     }
 
 

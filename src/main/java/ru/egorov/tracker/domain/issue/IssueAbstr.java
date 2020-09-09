@@ -23,6 +23,9 @@ public abstract class IssueAbstr implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date date;
 
+    @Temporal(TemporalType.DATE)
+    private Date closeDate;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "creator", referencedColumnName = "id")
     private User creator;
@@ -113,6 +116,14 @@ public abstract class IssueAbstr implements Serializable {
 
     public void setExecutor(User executor) {
         this.executor = executor;
+    }
+
+    public Date getCloseDate() {
+        return closeDate;
+    }
+
+    public void setCloseDate(Date closeDate) {
+        this.closeDate = closeDate;
     }
 
     @Override
