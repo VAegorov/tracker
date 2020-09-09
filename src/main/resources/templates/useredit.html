@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Tracker</title>
+</head>
+<body>
+    <div>
+        <form th:action="@{/logout}" th:method="post">
+            <input type="submit" value="Sign Out"/>
+        </form>
+    </div>
+    <a th:href="@{/home}">Все проекты</a>
+<h3>Мой профиль</h3>
+    <div th:object="${user}">
+        <form th:action="@{/usereditaction}" th:method="post">
+            <p>Имя</p>
+            <input th:type="text" th:name="firstname" th:value="*{firstName}">
+            <p>Фамилия</p>
+            <input th:type="text" th:name="lastname" th:value="*{lastName}">
+            <p>email</p>
+            <input th:type="text" th:name="email" th:value="*{email}">
+            <input th:hidden="userid" th:name="userid" th:value="*{id}">
+            <p><button type="submit">Сохранить</button></p>
+        </form>
+    </div>
+
+</body>
+</html>

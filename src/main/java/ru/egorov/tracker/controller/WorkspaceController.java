@@ -66,7 +66,7 @@ public class WorkspaceController {
         }
         model.addAttribute("isEditor", isEditor);
 
-        return "/workspace";
+        return "workspace";
     }
 
     @PostMapping("/addissue")

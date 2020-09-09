@@ -75,7 +75,7 @@ public class IssueController {
             model.addAttribute("resolveNoEditIssue", resolveNoEditIssue);
         }
 
-        return "/issue";
+        return "issue";
 
     }
 
@@ -166,7 +166,7 @@ public class IssueController {
             model.addAttribute("resolveNoEditIssue", resolveNoEditIssue);
         }
 
-        return "/subissue";
+        return "subissue";
     }
 
     @PostMapping("editsubissue")

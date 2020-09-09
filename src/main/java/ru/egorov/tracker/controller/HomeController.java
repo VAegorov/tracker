@@ -57,4 +57,18 @@ public class HomeController {
 
         return "home";
     }
+
+    @GetMapping("/useredit")
+    public String userEditPage(@AuthenticationPrincipal User user, Model model) {
+        model.addAttribute("user", user);
+
+        return "useredit";
+    }
+
+    @PostMapping("/usereditaction")
+    public String userEdit (@AuthenticationPrincipal User user, Model model) {
+        //если id текущего пользователя равно id изменяемого user, то тогда разрешаем сохранение
+
+        return "redirect:/useredit";
+    }
 }
