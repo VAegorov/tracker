@@ -4,6 +4,7 @@ import ru.egorov.tracker.domain.issue.Issue;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,7 +25,8 @@ public class Back implements ImplStorage, Serializable {
     )*/
     //@ElementCollection(targetClass = Issue.class)
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "back_id", referencedColumnName = "id")
+    @JoinColumn(name = "back_id", referencedColumnName = "id", nullable = false)
+    @OrderColumn(name = "pos", nullable = false)
     private Set<Issue> issues = new HashSet<>();
 
     /*@Autowired

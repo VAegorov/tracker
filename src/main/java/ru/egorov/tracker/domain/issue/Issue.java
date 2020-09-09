@@ -9,7 +9,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "issue")
-public class Issue /*extends IssueAbstr*/{
+public class Issue extends IssueAbstr{
     public Long getId() {
         return id;
     }
@@ -29,11 +29,11 @@ public class Issue /*extends IssueAbstr*/{
     public Issue() {
     }
 
-    /*public Issue(String name, String description, User creator, User executor, *//*Project project,*//*
+    public Issue(String name, String description, User creator, User executor, /*Project project,*/
                  IssuePriority issuePriority, IssueStatus issueStatus) {
-        //super(name, creator, executor, issuePriority, issueStatus, description);
+        super(name, creator, executor, issuePriority, issueStatus, description);
         //this.project = project;
-    }*/
+    }
 
    /* public Project getProject() {
         return project;
