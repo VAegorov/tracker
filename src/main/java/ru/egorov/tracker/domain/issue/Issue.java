@@ -15,7 +15,7 @@ public class Issue extends IssueAbstr{
     private Project project;
     @OneToMany(mappedBy = "issue", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private Set<SubIssue> subIssues = new HashSet<>();
-    private boolean backLog = true;
+    private boolean isBackLog = true;
 
 
     public Issue() {
@@ -43,11 +43,11 @@ public class Issue extends IssueAbstr{
         this.subIssues = subIssues;
     }
 
-    public boolean isBackLog() {
-        return backLog;
+    public boolean isIsBackLog() {
+        return isBackLog;
     }
 
-    public void setBackLog(boolean backLog) {
-        this.backLog = backLog;
+    public void setIsBackLog(boolean backLog) {
+        this.isBackLog = backLog;
     }
 }

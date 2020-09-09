@@ -21,6 +21,7 @@ import ru.egorov.tracker.repos.UserRepo;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashSet;
+import java.util.Optional;
 
 @Controller
 public class WorkspaceController {
@@ -42,8 +43,13 @@ public class WorkspaceController {
 
         model.addAttribute("user", user);
 
-        Iterable<Issue> issues = issueRepo.findAllByProjectId(projectId);
-        model.addAttribute("issues", issues);
+        Iterable<Issue> issuesBackLog = issueRepo.findAllByProjectIdAndIsBackLogIsTrue(projectId);
+        model.addAttribute("issuesbacklog", issuesBackLog);
+
+        Iterable<Issue> issuesSprint = issueRepo.findAllByProjectIdAndIsBackLogIsFalse(projectId);
+        model.addAttribute("issuessprint", issuesSprint);
+
+
 
         Iterable<User> users = userRepo.findNewUser(projectId);
         model.addAttribute("users", users);
@@ -92,4 +98,38 @@ public class WorkspaceController {
 
         return "redirect:/workspace?projectId=" + projectId;
     }
+
+    @GetMapping("/frombacklogtosprint")
+    public String frombacklogtosprint(@AuthenticationPrincipal User user,
+                                      @RequestParam Long issueid) {
+        Optional<Issue> optionalIssue = issueRepo.findById(issueid);
+        Long projectId = null;
+        if (optionalIssue.isPresent()) {
+            Issue issue = optionalIssue.get();
+            issue.setIsBackLog(false);
+            issueRepo.save(issue);
+            projectId = issue.getProject().getId();
+            return "redirect:/workspace?projectId=" + projectId;
+        }
+
+        return "/home";//если нет проектаid, то переход на общую страницу с проектами
+    }
+
+    @GetMapping("/fromsprinttobacklog")
+    public String fromsprinttobacklog(@AuthenticationPrincipal User user,
+                                      @RequestParam Long issueid) {
+        Optional<Issue> optionalIssue = issueRepo.findById(issueid);
+        Long projectId = null;
+        if (optionalIssue.isPresent()) {
+            Issue issue = optionalIssue.get();
+            issue.setIsBackLog(true);
+            issueRepo.save(issue);
+            projectId = issue.getProject().getId();
+            return "redirect:/workspace?projectId=" + projectId;
+        }
+
+        return "/home";//если нет проектаid, то переход на общую страницу с проектами
+    }
+
+
 }

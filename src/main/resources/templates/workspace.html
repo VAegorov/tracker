@@ -33,7 +33,7 @@
 </div>
 
 <table>
-    <caption>Задачи</caption>
+    <caption>BackLog</caption>
     <tr>
         <td>ID</td>
         <td>Название</td>
@@ -45,7 +45,7 @@
         <td>Дата создания</td>
         <td></td>
     </tr>
-    <tr th:each="issue : ${issues}">
+    <tr th:each="issue : ${issuesbacklog}">
             <td th:text="${issue.id}"></td>
             <td th:text="${issue.name}"></td>
             <td th:text="${issue.description}"></td>
@@ -60,6 +60,48 @@
                     <input th:hidden="issueId" th:value="${issue.id}" name="issueId">
                 </form>
             </td>
+        <td>
+                <form th:action="@{/frombacklogtosprint}" method="get">
+                    <button>Переместить в Sprint</button>
+                    <input th:hidden="issueId" th:value="${issue.id}" name="issueid">
+                </form>
+            </td>
+    </tr>
+</table>
+<table>
+    <caption>Sprint</caption>
+    <tr>
+        <td>ID</td>
+        <td>Название</td>
+        <td>Описание</td>
+        <td>Автор</td>
+        <td>Исполнитель</td>
+        <td>Приоритет</td>
+        <td>Статус</td>
+        <td>Дата создания</td>
+        <td></td>
+    </tr>
+    <tr th:each="issue : ${issuessprint}">
+        <td th:text="${issue.id}"></td>
+        <td th:text="${issue.name}"></td>
+        <td th:text="${issue.description}"></td>
+        <td th:text="${issue.creator.getUsername()}"></td>
+        <td th:text="${issue.executor.getUsername()}"></td>
+        <td th:text="${issue.issuePriority}"></td>
+        <td th:text="${issue.issueStatus}"></td>
+        <td th:text="${issue.date}"></td>
+        <td>
+            <form th:action="@{/issue}" method="get">
+                <button>Редактировать</button>
+                <input th:hidden="issueId" th:value="${issue.id}" name="issueId">
+            </form>
+        </td>
+        <td>
+            <form th:action="@{/fromsprinttobacklog}" method="get">
+                <button>Переместить в BackLog</button>
+                <input th:hidden="issueId" th:value="${issue.id}" name="issueid">
+            </form>
+        </td>
     </tr>
 </table>
 <div th:if="${isEditor}">
