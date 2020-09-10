@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Tracker</title>
+</head>
+<body>
+<div>
+    <form th:action="@{/logout}" method="post">
+        <input type="submit" value="Sign Out"/>
+    </form>
+</div>
+<a th:href="@{/home}">Все проекты</a>
+<div>
+    <form th:action="@{/workspace}" th:method="get">
+        <button>Вернуться на проект</button>
+        <input th:hidden="projectId" th:value="${project.id}" name="projectId">
+    </form>
+</div>
+<h1 th:text="${project.projectName}"></h1>
+<h3>Участники проекта</h3>
+<p th:text="'Владелец проекта: ' + ${project.getOwner().getFirstName()} + ' ' +
+${project.getOwner().getLastName()}"></p>
+<p th:text="'Администратор проекта: ' + ${project.getAdmin().getFirstName()} + ' ' +
+${project.getAdmin().getLastName()}"></p>
+<div>
+    <table>
+        <tr>
+            <td>Имя</td>
+            <td>Фамилия</td>
+            <td>email</td>
+            <td>username</td>
+            <td>Действие</td>
+        </tr>
+        <tr th:each="user : ${project.getUsers()}">
+            <td th:text="${user.firstName}"></td>
+            <td th:text="${user.lastName}"></td>
+            <td th:text="${user.email}"></td>
+            <td th:text="${user.username}"></td>
+            <td>
+                <form th:action="@{/deleteprojectuser}" th:method="post">
+                    <input th:hidden="projectid" th:value="${project.id}" name="projectid">
+                    <input th:hidden="userid" th:value="${user.id}" name="userid">
+                    <input type="submit" value="Удалить из проекта">
+                </form>
+            </td>
+        </tr>
+    </table>
+</div>
+<p></p>
+<div>
+    <table>
+        <caption>Другие пользователи</caption>
+        <tr>
+            <td>Имя</td>
+            <td>Фамилия</td>
+            <td>email</td>
+            <td>username</td>
+            <td>Действие</td>
+        </tr>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.firstName}"></td>
+            <td th:text="${user.lastName}"></td>
+            <td th:text="${user.email}"></td>
+            <td th:text="${user.username}"></td>
+            <td>
+                <form th:action="@{/addProjectUser}" th:method="post">
+                    <input th:hidden="projectid" th:value="${project.id}" name="projectid">
+                    <input th:hidden="userid" th:value="${user.id}" name="userid">
+                    <input type="submit" value="Добавить в проект">
+                </form>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<!--<div th:if="${isEditor}">
+    <h2>Добавить участника проекта: </h2>
+    <form th:action="@{/addProjectUser}" th:method="post">
+        <p><select name="userid" size="1">
+            <option th:each="user : ${users}" th:utext="${user.username}" th:value="${user.id}"></option>
+            <input th:hidden="projectId" th:value="${project.id}" name="projectId">
+        </select>
+            <input type="submit" value="Добавить"></p>
+    </form>
+</div>-->
+
+
+</body>
+</html>

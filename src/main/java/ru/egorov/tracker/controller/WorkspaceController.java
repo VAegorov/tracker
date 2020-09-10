@@ -51,8 +51,7 @@ public class WorkspaceController {
 
 
 
-        Iterable<User> users = userRepo.findNewUser(projectId);
-        model.addAttribute("users", users);
+
 
         //IssuePriority[] issuePriorities = IssuePriority.values();
         model.addAttribute("issuePriorities", IssuePriority.values());
@@ -88,15 +87,15 @@ public class WorkspaceController {
     @PostMapping("/addProjectUser")
     public String addProjectUser(@AuthenticationPrincipal User user,
                                  @RequestParam Long userid,
-                                 @RequestParam Long projectId) {
+                                 @RequestParam Long projectid) {
         User newUser = userRepo.findById(userid).get();
-        Project project = projectRepo.findById(projectId).get();
+        Project project = projectRepo.findById(projectid).get();
         project.getUsers().add(newUser);
         projectRepo.save(project);
         newUser.getProjectsUser().add(project);
         userRepo.save(newUser);
 
-        return "redirect:/workspace?projectId=" + projectId;
+        return "redirect:/pagenewuserproject?projectid=" + projectid;
     }
 
     @GetMapping("/frombacklogtosprint")
@@ -119,16 +118,34 @@ public class WorkspaceController {
     public String fromsprinttobacklog(@AuthenticationPrincipal User user,
                                       @RequestParam Long issueid) {
         Optional<Issue> optionalIssue = issueRepo.findById(issueid);
-        Long projectId = null;
+        //Long projectId = null;
         if (optionalIssue.isPresent()) {
             Issue issue = optionalIssue.get();
             issue.setIsBackLog(true);
             issueRepo.save(issue);
-            projectId = issue.getProject().getId();
+            Long projectId = issue.getProject().getId();
             return "redirect:/workspace?projectId=" + projectId;
         }
 
         return "redirect:/home";//если нет проектаid, то переход на общую страницу с проектами
+    }
+
+    @GetMapping("/pagenewuserproject")
+    public String pagenewuserproject(@AuthenticationPrincipal User user, @RequestParam Long projectid, Model model) {
+        Optional<Project> optionalProject = projectRepo.findById(projectid);
+        if (optionalProject.isPresent()) {
+            Project project = optionalProject.get();
+            model.addAttribute(project);
+
+            Iterable<User> users = userRepo.findNewUser(projectid);
+            model.addAttribute("users", users);
+
+
+            return "pagenewuserproject";
+        }
+
+
+        return "home";
     }
 
 

@@ -8,6 +8,7 @@
 </head>
 <body>
 <a th:href="@{/home}">Все проекты</a>
+<a th:if="${isEditor}" href="pagenewuserproject.html" th:href="@{/pagenewuserproject(projectid=${project.id})}">Участники проекта</a>
 <h1 th:text="${project.projectName}"></h1>
 <div>
     <form th:action="@{/logout}" method="post">
@@ -104,7 +105,7 @@
         </td>
     </tr>
 </table>
-<div th:if="${isEditor}">
+<!--<div th:if="${isEditor}">
     <h2>Добавить участника проекта: </h2>
     <form th:action="@{/addProjectUser}" th:method="post">
         <p><select name="userid" size="1">
@@ -113,6 +114,6 @@
         </select>
             <input type="submit" value="Добавить"></p>
     </form>
-</div>
+</div>-->
 </body>
 </html>
