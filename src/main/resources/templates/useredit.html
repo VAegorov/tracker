@@ -14,6 +14,7 @@
     </div>
     <a th:href="@{/home}">Все проекты</a>
 <h3>Мой профиль</h3>
+
     <div th:object="${user}">
         <form th:action="@{/usereditaction}" th:method="post">
             <p>Имя</p>
@@ -25,6 +26,7 @@
             <input th:hidden="userid" th:name="userid" th:value="*{id}">
             <p><button type="submit">Сохранить</button></p>
         </form>
+        <div th:if="${noresolvesave}"><h2>Вам не разрешено сохранение!</h2></div>
     </div>
 
 </body>

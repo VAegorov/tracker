@@ -66,9 +66,24 @@ public class HomeController {
     }
 
     @PostMapping("/usereditaction")
-    public String userEdit (@AuthenticationPrincipal User user, Model model) {
+    public String userEdit (@AuthenticationPrincipal User user, Model model, @RequestParam Long userid,
+                            @RequestParam String firstname, @RequestParam String lastname,
+                            @RequestParam String email) {
         //если id текущего пользователя равно id изменяемого user, то тогда разрешаем сохранение
+        boolean noresolveSave = true;
+        model.addAttribute("noresolvesave", noresolveSave);
+        if (user.getId() == userid) {
+            user.setFirstName(firstname);
+            user.setLastName(lastname);
+            user.setEmail(email);
+            userRepo.save(user);
+            noresolveSave = false;
+            model.addAttribute("noresolvesave", noresolveSave);
+        }
+        model.addAttribute("user", user);
 
-        return "redirect:/useredit";
+
+        //return "redirect:/useredit";
+        return "useredit";
     }
 }
