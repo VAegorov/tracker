@@ -105,8 +105,8 @@ public class IssueController {
     }
 
     @PostMapping("/deleteissue")
-    public ModelAndView deleteissue(@AuthenticationPrincipal User user, @RequestParam Long issueId,
-                                    @RequestParam Long projectId, HttpServletRequest request) {
+    public String deleteissue(@AuthenticationPrincipal User user, @RequestParam Long issueId,
+                                    @RequestParam Long projectId) {
 
         Project project = projectRepo.findById(projectId).get();
         Issue issue = issueRepo.findById(issueId).get();
@@ -116,9 +116,8 @@ public class IssueController {
         issueRepo.deleteById(issueId);
         projectRepo.save(project);
 
-        request.setAttribute(View.RESPONSE_STATUS_ATTRIBUTE, HttpStatus.TEMPORARY_REDIRECT);
 
-        return new ModelAndView("redirect:/workspace");
+        return "redirect:/workspace?projectId=" + projectId;
     }
 
     @PostMapping("/addsubissue")

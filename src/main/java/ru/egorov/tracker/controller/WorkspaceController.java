@@ -15,13 +15,17 @@ import ru.egorov.tracker.domain.User;
 import ru.egorov.tracker.domain.issue.Issue;
 import ru.egorov.tracker.domain.issue.IssuePriority;
 import ru.egorov.tracker.domain.issue.IssueStatus;
+import ru.egorov.tracker.domain.issue.SubIssue;
 import ru.egorov.tracker.repos.IssueRepo;
 import ru.egorov.tracker.repos.ProjectRepo;
+import ru.egorov.tracker.repos.SubIssueRepo;
 import ru.egorov.tracker.repos.UserRepo;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 public class WorkspaceController {
@@ -32,6 +36,8 @@ public class WorkspaceController {
     private UserRepo userRepo;
     @Autowired
     private IssueRepo issueRepo;
+    @Autowired
+    private SubIssueRepo subIssueRepo;
 
     @GetMapping("/workspace")
     public String inWorkspace(@AuthenticationPrincipal User user, @RequestParam Long projectId, Model model) {
@@ -140,12 +146,39 @@ public class WorkspaceController {
             Iterable<User> users = userRepo.findNewUser(projectid);
             model.addAttribute("users", users);
 
-
             return "pagenewuserproject";
         }
 
-
         return "home";
+    }
+
+    @PostMapping("/deleteprojectuser")
+    public String deleteprojectuser(@AuthenticationPrincipal User user, @RequestParam Long projectid, @RequestParam Long userid, Model model) {
+        Optional<Project> optionalProject = projectRepo.findById(projectid);
+        if(optionalProject.isPresent()) {
+            Project project = optionalProject.get();
+
+            Set<SubIssue> subIssuesUser = subIssueRepo.findByExecutorId(userid);//все подзадачи где удаляемый исполнитель
+            Set<Issue> issuesUser = project.getIssues().stream().filter(i -> i.getExecutor().getId() == userid)
+                    .collect(Collectors.toSet());//задачи удаляемого пользователя
+            issuesUser.stream().forEach(i -> i.setExecutor(project.getOwner()));//исполнителем задач назначаем владельца
+            Set<SubIssue> subIssues = subIssuesUser.stream().filter(i -> i.getIssue().getProject().getId() == projectid)
+                    .collect(Collectors.toSet());//подзадачи в проекте где удаляемый исполнитель
+            subIssues.stream().forEach(i -> i.setExecutor(project.getOwner()));//исполнителем подзадач назначаем владельца
+
+            issueRepo.saveAll(issuesUser);
+            subIssueRepo.saveAll(subIssues);
+
+            User deleteUser = userRepo.findById(userid).get();
+
+            project.getUsers().remove(deleteUser);
+            projectRepo.save(project);
+
+
+            return "redirect:/pagenewuserproject?projectid=" + projectid;
+        }
+
+        return "redirect:/home";
     }
 
 
