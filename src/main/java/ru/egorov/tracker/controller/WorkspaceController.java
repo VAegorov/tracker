@@ -12,10 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.View;
 import ru.egorov.tracker.domain.Project;
 import ru.egorov.tracker.domain.User;
-import ru.egorov.tracker.domain.issue.Issue;
-import ru.egorov.tracker.domain.issue.IssuePriority;
-import ru.egorov.tracker.domain.issue.IssueStatus;
-import ru.egorov.tracker.domain.issue.SubIssue;
+import ru.egorov.tracker.domain.issue.*;
 import ru.egorov.tracker.repos.IssueRepo;
 import ru.egorov.tracker.repos.ProjectRepo;
 import ru.egorov.tracker.repos.SubIssueRepo;
@@ -55,15 +52,11 @@ public class WorkspaceController {
         Iterable<Issue> issuesSprint = issueRepo.findAllByProjectIdAndIsBackLogIsFalse(projectId);
         model.addAttribute("issuessprint", issuesSprint);
 
-
-
-
-
-        //IssuePriority[] issuePriorities = IssuePriority.values();
         model.addAttribute("issuePriorities", IssuePriority.values());
 
-        //IssueStatus[] issueStatuses = IssueStatus.values();
         model.addAttribute("issueStatuses", IssueStatus.values());
+
+        model.addAttribute("issueType", IssueType.values());
 
         isEditor = false;
         if (project.isOwner(user) || project.isAdmin(user)) {
@@ -76,13 +69,13 @@ public class WorkspaceController {
 
     @PostMapping("/addissue")
     public String addIssue(@AuthenticationPrincipal User user, @RequestParam Long projectId,
-                                 @RequestParam String issueName, @RequestParam String issueDescription,
-                                 @RequestParam IssuePriority issuePriority, @RequestParam IssueStatus issueStatus,
-                                 @RequestParam User executorId) {
+                           @RequestParam String issueName, @RequestParam String issueDescription,
+                           @RequestParam IssuePriority issuePriority, @RequestParam IssueStatus issueStatus,
+                           @RequestParam User executorId, @RequestParam IssueType issuetype) {
         Project project = projectRepo.findById(projectId).get();
 
         if (!issueName.isEmpty() && !issueDescription.isEmpty()) {
-            Issue issue = new Issue(issueName, issueDescription, user, executorId, project, issuePriority, issueStatus);
+            Issue issue = new Issue(issueName, issueDescription, user, executorId, project, issuePriority, issueStatus, issuetype);
             project.getIssues().add(issue);
             projectRepo.save(project);
         }

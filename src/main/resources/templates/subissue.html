@@ -28,7 +28,7 @@
     <h2>Редактирование подзадачи</h2>
     <form th:action="@{/editsubissue}" th:method="post">
         <input type="text" name="issueName" th:value="${subIssue.name}">
-        <input type="text" name="issueDescription" th:value="${subIssue.description}">
+        <textarea name="issueDescription" th:field="${subIssue.description}"></textarea>
         <!--<select name="executorId" size="1">
             <option th:each="executor : ${executors}" th:utext="${executor.username}" th:value="${executor.id}"
                     th:selected="${executor==issue.executor}"></option>

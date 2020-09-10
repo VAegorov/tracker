@@ -16,38 +16,90 @@
     </form>
 </div>
 <div>
+    <h3>Добавление задачи</h3>
     <form th:action="@{/addissue}" method="post">
+        <p>Название задачи:</p>
         <input type="text" name="issueName" placeholder="Добавьте задачу">
-        <input type="text" name="issueDescription" placeholder="Добавьте описание">
+        <p>Описание задачи:</p>
+        <textarea name="issueDescription" placeholder="Добавьте описание"></textarea>
+        <p>Выберите исполнителя:</p>
         <select name="executorId" size="1">
             <option th:each="executor : ${executors}" th:utext="${executor.username}" th:value="${executor.id}" th:selected="${executor==user}"></option>
         </select>
+        <p>Укажите тип задачи:</p>
+        <select name="issuetype" size="1">
+            <option th:each="issuetype : ${issueType}" th:utext="${issuetype}" th:value="${issuetype}"></option>
+        </select>
+        <p>Установите приоритет:</p>
         <select name="issuePriority" size="1">
             <option th:each="priority : ${issuePriorities}" th:utext="${priority}" th:value="${priority}"></option>
         </select>
+        <p>Установите статус:</p>
         <select name="issueStatus" size="1">
             <option th:each="issueStatus : ${issueStatuses}" th:utext="${issueStatus}" th:value="${issueStatus}"></option>
-        </select>
+        </select><br><br>
         <input th:hidden="projectid" th:value="${project.id}" name="projectId">
-        <button type="submit">Добавить</button>
+        <button type="submit">Добавить задачу</button>
     </form>
 </div>
-
-<table>
-    <caption>BackLog</caption>
-    <tr>
-        <td>ID</td>
-        <td>Название</td>
-        <td>Описание</td>
-        <td>Автор</td>
-        <td>Исполнитель</td>
-        <td>Приоритет</td>
-        <td>Статус</td>
-        <td>Дата создания</td>
-        <td></td>
-    </tr>
-    <tr th:each="issue : ${issuesbacklog}">
-            <td th:text="${issue.id}"></td>
+<br>
+<div>
+    <table>
+        <caption>BackLog</caption>
+        <tr>
+            <td></td>
+            <td>Название</td>
+            <td>Описание</td>
+            <td>Автор</td>
+            <td>Исполнитель</td>
+            <td>Тип</td>
+            <td>Приоритет</td>
+            <td>Статус</td>
+            <td>Дата создания</td>
+            <td></td>
+        </tr>
+        <tr th:each="issue : ${issuesbacklog}">
+            <td></td>
+            <td th:text="${issue.name}"></td>
+            <td th:text="${issue.description}"></td>
+            <td th:text="${issue.creator.getUsername()}"></td>
+            <td th:text="${issue.executor.getUsername()}"></td>
+            <td th:text="${issue.issueType}"></td>
+            <td th:text="${issue.issuePriority}"></td>
+            <td th:text="${issue.issueStatus}"></td>
+            <td th:text="${issue.date}"></td>
+            <td>
+                <form th:action="@{/issue}" method="get">
+                    <button>Редактировать</button>
+                    <input th:hidden="issueId" th:value="${issue.id}" name="issueId">
+                </form>
+            </td>
+            <td>
+                <form th:action="@{/frombacklogtosprint}" method="get">
+                    <button>Переместить в Sprint</button>
+                    <input th:hidden="issueId" th:value="${issue.id}" name="issueid">
+                </form>
+            </td>
+        </tr>
+    </table>
+</div>
+<br>
+<div>
+    <table>
+        <caption>Sprint</caption>
+        <tr>
+            <td></td>
+            <td>Название</td>
+            <td>Описание</td>
+            <td>Автор</td>
+            <td>Исполнитель</td>
+            <td>Приоритет</td>
+            <td>Статус</td>
+            <td>Дата создания</td>
+            <td></td>
+        </tr>
+        <tr th:each="issue : ${issuessprint}">
+            <td></td>
             <td th:text="${issue.name}"></td>
             <td th:text="${issue.description}"></td>
             <td th:text="${issue.creator.getUsername()}"></td>
@@ -61,59 +113,14 @@
                     <input th:hidden="issueId" th:value="${issue.id}" name="issueId">
                 </form>
             </td>
-        <td>
-                <form th:action="@{/frombacklogtosprint}" method="get">
-                    <button>Переместить в Sprint</button>
+            <td>
+                <form th:action="@{/fromsprinttobacklog}" method="get">
+                    <button>Переместить в BackLog</button>
                     <input th:hidden="issueId" th:value="${issue.id}" name="issueid">
                 </form>
             </td>
-    </tr>
-</table>
-<table>
-    <caption>Sprint</caption>
-    <tr>
-        <td>ID</td>
-        <td>Название</td>
-        <td>Описание</td>
-        <td>Автор</td>
-        <td>Исполнитель</td>
-        <td>Приоритет</td>
-        <td>Статус</td>
-        <td>Дата создания</td>
-        <td></td>
-    </tr>
-    <tr th:each="issue : ${issuessprint}">
-        <td th:text="${issue.id}"></td>
-        <td th:text="${issue.name}"></td>
-        <td th:text="${issue.description}"></td>
-        <td th:text="${issue.creator.getUsername()}"></td>
-        <td th:text="${issue.executor.getUsername()}"></td>
-        <td th:text="${issue.issuePriority}"></td>
-        <td th:text="${issue.issueStatus}"></td>
-        <td th:text="${issue.date}"></td>
-        <td>
-            <form th:action="@{/issue}" method="get">
-                <button>Редактировать</button>
-                <input th:hidden="issueId" th:value="${issue.id}" name="issueId">
-            </form>
-        </td>
-        <td>
-            <form th:action="@{/fromsprinttobacklog}" method="get">
-                <button>Переместить в BackLog</button>
-                <input th:hidden="issueId" th:value="${issue.id}" name="issueid">
-            </form>
-        </td>
-    </tr>
-</table>
-<!--<div th:if="${isEditor}">
-    <h2>Добавить участника проекта: </h2>
-    <form th:action="@{/addProjectUser}" th:method="post">
-        <p><select name="userid" size="1">
-            <option th:each="user : ${users}" th:utext="${user.username}" th:value="${user.id}"></option>
-            <input th:hidden="projectId" th:value="${project.id}" name="projectId">
-        </select>
-            <input type="submit" value="Добавить"></p>
-    </form>
-</div>-->
+        </tr>
+    </table>
+</div>
 </body>
 </html>

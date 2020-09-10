@@ -81,15 +81,15 @@ public class IssueController {
 
     @PostMapping("/editissue")
     public String issuePage(@RequestParam Long issueId, @RequestParam String issueName,
-                           @RequestParam String issueDescription, @RequestParam IssuePriority issuePriority,
+                           @RequestParam String description, @RequestParam IssuePriority issuePriority,
                            @RequestParam IssueStatus issueStatus, @RequestParam Long executorId) {
-        if (!issueName.isEmpty() || !issueDescription.isEmpty()) {
+        if (!issueName.isEmpty() || !description.isEmpty()) {
             Issue issue = issueRepo.findById(issueId).get();
             User executor = userRepo.findById(executorId).get();
             issue.setIssueStatus(issueStatus);
             issue.setExecutor(executor);
             issue.setName(issueName);
-            issue.setDescription(issueDescription);
+            issue.setDescription(description);
             issue.setIssuePriority(issuePriority);
 
             if (!issue.getSubIssues().isEmpty()) {
@@ -170,11 +170,11 @@ public class IssueController {
 
     @PostMapping("editsubissue")
     public String editsubissue(@AuthenticationPrincipal User user, @RequestParam Long issueId,
-                               @RequestParam String issueName, @RequestParam String issueDescription,
+                               @RequestParam String issueName, @RequestParam String description,
                                @RequestParam IssuePriority issuePriority, @RequestParam IssueStatus issueStatus) {
         SubIssue subIssue = subIssueRepo.findById(issueId).get();
         subIssue.setName(issueName);
-        subIssue.setDescription(issueDescription);
+        subIssue.setDescription(description);
         subIssue.setIssuePriority(issuePriority);
         subIssue.setIssueStatus(issueStatus);
         subIssueRepo.save(subIssue);
