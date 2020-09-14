@@ -22,5 +22,10 @@ public interface IssueRepo extends JpaRepository<Issue, Long> {
     void deleteById(Long id);
 
 
+    Iterable<Issue> findAllByExecutorId(Long idExecutor);
+
+    Iterable<Issue> findAllByCreatorId(Long idCreator);
+
+    Iterable<Issue> findByProjectId(Long projectId);
 }
 

@@ -14,7 +14,7 @@ public class Issue extends IssueAbstr{
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "project", referencedColumnName = "id")
     private Project project;
-
+    @Enumerated(EnumType.STRING)
     private IssueType issueType;
 
     @OneToMany(mappedBy = "issue", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)

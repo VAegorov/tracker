@@ -35,10 +35,10 @@ public class User implements UserDetails, Serializable {
     private String email;
 
 
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = false, fetch = FetchType.EAGER)
     private Set<Project> projectsOwner = new HashSet<>();//проекты в которых он owner
 
-    @OneToMany(mappedBy = "admin", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "admin", cascade = CascadeType.ALL, orphanRemoval = false, fetch = FetchType.EAGER)
     private Set<Project> projectsAdmin = new HashSet<>();//проекты в которых он admin
 
     @ManyToMany
@@ -48,10 +48,10 @@ public class User implements UserDetails, Serializable {
     )
     private Set<Project> projectsUser = new HashSet<>();//проекты в которых он user
 
-    @OneToMany(mappedBy = "creator", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "creator", cascade = CascadeType.ALL, orphanRemoval = false, fetch = FetchType.EAGER)
     private Set<Issue> issueCreator = new HashSet<>();//задачи в которых он creator
 
-    @OneToMany(mappedBy = "executor", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "executor", cascade = CascadeType.ALL, orphanRemoval = false, fetch = FetchType.EAGER)
     private Set<Issue> issueExecutor = new HashSet<>();//задачи в которых он executor
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)

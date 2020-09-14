@@ -13,6 +13,11 @@
         </form>
     </div>
     <a href="useredit.html" th:href="@{/useredit}">Личный профиль</a>
+
+    <div th:if="${isadmin}">
+        <a href="adminmain.html" th:href="@{/admin/main}">Панель администратора</a>
+    </div>
+
     <div>
         <form th:action="@{/home}"  th:method="post">
             <input type="text" name="projectName" placeholder="Добавьте проект">

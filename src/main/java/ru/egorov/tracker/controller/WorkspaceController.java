@@ -151,7 +151,7 @@ public class WorkspaceController {
         if(optionalProject.isPresent()) {
             Project project = optionalProject.get();
 
-            Set<SubIssue> subIssuesUser = subIssueRepo.findByExecutorId(userid);//все подзадачи где удаляемый исполнитель
+            Set<SubIssue> subIssuesUser = subIssueRepo.findByExecutorId(userid);//все подзадачи где удаляемый исполнитель во всех проектах
             Set<Issue> issuesUser = project.getIssues().stream().filter(i -> i.getExecutor().getId() == userid)
                     .collect(Collectors.toSet());//задачи удаляемого пользователя
             issuesUser.stream().forEach(i -> i.setExecutor(project.getOwner()));//исполнителем задач назначаем владельца

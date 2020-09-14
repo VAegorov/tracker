@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Tracker</title>
+</head>
+<body>
+<h2>Список проектов</h2>
+<table>
+    <thead>
+    <tr>
+        <td>Название</td>
+        <td>Автор</td>
+        <td></td>
+    </tr>
+    </thead>
+    <tr th:each="project : ${projects}">
+        <td th:text="${project.getProjectName()}"></td>
+        <td th:text="${project.getOwner()}"></td>
+        <td><a href="projectlist.html" th:href="@{'/admin/projectlist/' + ${project.id}}">Удалить</a></td>
+    </tr>
+</table>
+
+</body>
+</html>

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.egorov.tracker.domain.Project;
 //import ru.egorov.tracker.domain.ProjectUsers;
+import ru.egorov.tracker.domain.Role;
 import ru.egorov.tracker.domain.User;
 /*import ru.egorov.tracker.domain.issue.Issue;
 import ru.egorov.tracker.repos.IssueRepo;*/
@@ -54,6 +55,11 @@ public class HomeController {
 
         Iterable<Project> userProjects = projectRepo.findAllWhereByIdUser(user.getId());
         model.addAttribute("userProjects", userProjects);
+
+        if (user.getRoles().contains(Role.ADMIN)) {
+            boolean isAdmin = true;
+            model.addAttribute("isadmin", isAdmin);
+        }
 
         return "home";
     }
