@@ -36,28 +36,28 @@ public class User implements UserDetails, Serializable {
 
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = false, fetch = FetchType.EAGER)
-    private Set<Project> projectsOwner = new HashSet<>();//проекты в которых он owner
+    protected Set<Project> projectsOwner = new HashSet<>();//проекты в которых он owner
 
     @OneToMany(mappedBy = "admin", cascade = CascadeType.ALL, orphanRemoval = false, fetch = FetchType.EAGER)
-    private Set<Project> projectsAdmin = new HashSet<>();//проекты в которых он admin
+    protected Set<Project> projectsAdmin = new HashSet<>();//проекты в которых он admin
 
     @ManyToMany
     @JoinTable(name = "project_user",
             joinColumns = @JoinColumn(name = "usr_id"),
             inverseJoinColumns = @JoinColumn(name = "project_id")
     )
-    private Set<Project> projectsUser = new HashSet<>();//проекты в которых он user
+    protected Set<Project> projectsUser = new HashSet<>();//проекты в которых он user
 
     @OneToMany(mappedBy = "creator", cascade = CascadeType.ALL, orphanRemoval = false, fetch = FetchType.EAGER)
-    private Set<Issue> issueCreator = new HashSet<>();//задачи в которых он creator
+    protected Set<Issue> issueCreator = new HashSet<>();//задачи в которых он creator
 
     @OneToMany(mappedBy = "executor", cascade = CascadeType.ALL, orphanRemoval = false, fetch = FetchType.EAGER)
-    private Set<Issue> issueExecutor = new HashSet<>();//задачи в которых он executor
+    protected Set<Issue> issueExecutor = new HashSet<>();//задачи в которых он executor
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "usr_role", joinColumns = @JoinColumn(name = "usr_id"))
     @Enumerated(EnumType.STRING)
-    private Set<Role> roles;
+    protected Set<Role> roles;
 
     public User() {
     }

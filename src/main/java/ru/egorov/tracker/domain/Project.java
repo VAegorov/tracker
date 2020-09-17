@@ -30,10 +30,10 @@ public class Project implements Serializable {
             joinColumns = @JoinColumn(name = "project_id"),
             inverseJoinColumns = @JoinColumn(name = "usr_id")
     )
-    private Set<User> users = new HashSet<>();
+    protected Set<User> users = new HashSet<>();
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private Set<Issue> issues = new HashSet<>();
+    protected Set<Issue> issues = new HashSet<>();
 
     public Project() {
     }

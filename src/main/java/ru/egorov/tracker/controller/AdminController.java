@@ -104,9 +104,10 @@ public class AdminController {
         Iterable<Issue> issues = issueRepo.findByProjectId(project.getId());
         issueRepo.deleteAll(issues);
         //project.getIssues().removeAll((Collection<Issue>) issues);
-        project.setUsers(null);
+        project.getUsers().clear();
+        //projectRepo.save(project);
+        project.getIssues().clear();
         projectRepo.save(project);
-        project.setIssues(null);
         projectRepo.delete(project);
 
         return "redirect:/admin/projectlist";

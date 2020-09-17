@@ -18,7 +18,7 @@ public class Issue extends IssueAbstr{
     private IssueType issueType;
 
     @OneToMany(mappedBy = "issue", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private Set<SubIssue> subIssues = new HashSet<>();
+    protected Set<SubIssue> subIssues = new HashSet<>();
     private boolean isBackLog = true;
 
 
