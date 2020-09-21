@@ -71,4 +71,15 @@ public class Issue extends IssueAbstr{
     public void setBackLog(boolean backLog) {
         isBackLog = backLog;
     }
+
+    @Override
+    public String toString() {
+        return "Issue{" +
+                "project=" + project.getId() +
+                ", issueType=" + issueType +
+                ", subIssues=" + subIssues +
+                ", isBackLog=" + isBackLog +
+                ", issueId=" + getId() +
+                '}';
+    }
 }

@@ -16,6 +16,7 @@ import ru.egorov.tracker.repos.ProjectRepo;
 import ru.egorov.tracker.repos.SubIssueRepo;
 import ru.egorov.tracker.repos.UserRepo;
 
+import javax.transaction.Transactional;
 import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -53,6 +54,7 @@ public class AdminController {
     }
 
     @GetMapping("/userlist/{user}")
+    @Transactional
     public String userdelete(@PathVariable User user) {
         none = userRepo.findByUsername("none");
         System.out.println("id none************ " + none.getId());
@@ -98,16 +100,23 @@ public class AdminController {
     }
 
     @GetMapping("/projectlist/{project}")
+    @Transactional
     public String projectdelete (@PathVariable Project project) {
         project.setOwner(null);
         project.setAdmin(null);
         Iterable<Issue> issues = issueRepo.findByProjectId(project.getId());
-        issueRepo.deleteAll(issues);
+        System.out.println("Get issues!");
+        issues.forEach(System.out::println);
+
+        //issueRepo.deleteAll(issues);
         //project.getIssues().removeAll((Collection<Issue>) issues);
         project.getUsers().clear();
         //projectRepo.save(project);
-        project.getIssues().clear();
-        projectRepo.save(project);
+        issues = project.getIssues();
+        ((Set<Issue>) issues).clear();
+        System.out.println("After clear!");
+        issues.forEach(System.out::println);
+        //projectRepo.save(project);
         projectRepo.delete(project);
 
         return "redirect:/admin/projectlist";
